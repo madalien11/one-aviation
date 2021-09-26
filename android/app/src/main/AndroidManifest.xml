@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.one_aviation">
+    <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="one_aviation"
+        android:label="ONE aviation"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

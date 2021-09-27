@@ -9,3 +9,4 @@ const EdgeInsets marginBottom40 = EdgeInsets.only(bottom: 40);
 const EdgeInsets paddingBottom24 = EdgeInsets.only(bottom: 24);
 const EdgeInsets paddingAll12 = EdgeInsets.all(12);
 const EdgeInsets paddingHorizontal21 = EdgeInsets.symmetric(horizontal: 21);
+const EdgeInsets paddingHorizontal40 = EdgeInsets.symmetric(horizontal: 40);

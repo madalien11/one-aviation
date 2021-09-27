@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:one_aviation/src/constants/colors.dart';
+import 'package:one_aviation/src/screens/auth/login_screen.dart';
 import 'package:one_aviation/src/screens/home/home_screen.dart';
+import 'package:one_aviation/src/screens/profile/profile_screen.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class BottomNavigation extends StatelessWidget {
@@ -16,7 +19,9 @@ class BottomNavigation extends StatelessWidget {
       return [
         HomeScreen(),
         HomeScreen(),
-        HomeScreen(),
+        Hive.box('tokens').get('access') == null
+            ? LoginScreen()
+            : ProfileScreen(),
       ];
     }
 

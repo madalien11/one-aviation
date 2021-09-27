@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 
 import 'src/constants/material_theme.dart';
 import 'src/routes/routes.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  await Hive.openBox('tokens');
+
   runApp(MyApp());
 }
 
@@ -34,7 +38,7 @@ class MyApp extends StatelessWidget {
       ),
       onGenerateRoute: router.generateRoute,
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'ONE Aviation',
       theme: appThemeData,
     );
   }

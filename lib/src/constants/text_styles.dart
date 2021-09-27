@@ -63,4 +63,26 @@ class MyTextStyle {
     height: 1.25,
     fontWeight: FontWeight.w500,
   );
+
+  static const TextStyle OrangeTitleTextStyle = TextStyle(
+    fontSize: 28,
+    color: PrimaryOrangeColor,
+    height: 1.5,
+    fontWeight: FontWeight.w600,
+  );
+
+  static const TextStyle ButtonTextStyle = TextStyle(
+    fontSize: 18,
+    color: WhiteTitleTextColor,
+    height: 1.5,
+    letterSpacing: 1,
+    fontWeight: FontWeight.w600,
+  );
+
+  static const TextStyle TextButtonTextStyle = TextStyle(
+    fontSize: 16,
+    color: PrimaryOrangeColor,
+    height: 1.5,
+    fontWeight: FontWeight.w600,
+  );
 }

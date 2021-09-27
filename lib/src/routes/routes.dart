@@ -1,9 +1,10 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/widgets.dart';
 import 'package:one_aviation/src/screens/home/home_screen.dart';
+import 'package:one_aviation/src/screens/navigation/bottom_navigation.dart';
 
 class Routes {
-  static const String home = "/";
+  static const String main = "/";
   static const String login = "auth/login";
   static const String registration = "auth/registration";
 
@@ -22,8 +23,8 @@ class Routes {
   Route generateRoute(RouteSettings routeSettings) {
     return Routes.fadeThrough(routeSettings, (context) {
       switch (routeSettings.name) {
-        case Routes.home:
-          return HomeScreen();
+        case Routes.main:
+          return BottomNavigation();
         case Routes.login:
           return HomeScreen();
         case Routes.registration:

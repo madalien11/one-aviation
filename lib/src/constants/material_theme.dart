@@ -3,7 +3,8 @@ import 'package:one_aviation/src/constants/colors.dart';
 
 ThemeData appThemeData = ThemeData(
   primaryColor: PrimaryOrangeColor,
-  primarySwatch: Colors.blue,
+  primarySwatch: Colors.orange,
+  scaffoldBackgroundColor: Color(0xfff9f9f9),
 );
 
 // const CupertinoThemeData cupertinoThemeData = CupertinoThemeData(

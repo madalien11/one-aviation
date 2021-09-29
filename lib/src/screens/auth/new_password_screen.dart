@@ -9,20 +9,21 @@ import 'package:one_aviation/src/constants/colors.dart';
 import 'package:one_aviation/src/constants/spacing.dart';
 import 'package:one_aviation/src/constants/text_styles.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class NewPasswordScreen extends StatefulWidget {
+  const NewPasswordScreen({Key? key}) : super(key: key);
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _NewPasswordScreenState createState() => _NewPasswordScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  final usernameController = TextEditingController();
+class _NewPasswordScreenState extends State<NewPasswordScreen> {
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
   bool _isPressed = false;
   bool _isLoading = false;
   // bool _notConnected = false;
   bool _isObscure = true;
+  bool _confirmIsObscure = true;
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
   @override
@@ -39,23 +40,13 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               BottomRoundedImage(),
               Padding(
-                padding: const EdgeInsets.only(top: 30, bottom: 2),
+                padding: const EdgeInsets.only(top: 30, bottom: 24),
                 child: Center(
                   child: Text(
-                    'Welcome,',
+                    'Want to change your password?',
+                    textAlign: TextAlign.center,
                     style: MyTextStyle.googleFontWrapper(
                       MyTextStyle.OrangeTitleTextStyle,
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 24),
-                child: Center(
-                  child: Text(
-                    'sign in to continue!',
-                    style: MyTextStyle.googleFontWrapper(
-                      MyTextStyle.TitleTextStyle,
                     ),
                   ),
                 ),
@@ -69,17 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Column(
                           children: [
                             RoundedTextField(
-                              hintText: 'username',
-                              icon: Icons.person,
-                              controller: usernameController,
-                              keyboardType: TextInputType.emailAddress,
-                              validator: MultiValidator([
-                                requiredValidator,
-                                phoneEmailValidator,
-                              ]),
-                            ),
-                            RoundedTextField(
-                              hintText: 'password',
+                              hintText: 'new password',
                               icon: Icons.lock_rounded,
                               controller: passwordController,
                               isObscure: _isObscure,
@@ -104,9 +85,36 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                             ),
+                            RoundedTextField(
+                              hintText: 'confirm password',
+                              icon: Icons.lock_rounded,
+                              controller: confirmPasswordController,
+                              isObscure: _confirmIsObscure,
+                              validator: MultiValidator([
+                                requiredValidator,
+                                minLengthValidator,
+                                maxLengthValidator,
+                              ]),
+                              suffix: Padding(
+                                padding: const EdgeInsets.only(right: 14),
+                                child: CupertinoButton(
+                                  onPressed: () {
+                                    setState(() =>
+                                        _confirmIsObscure = !_confirmIsObscure);
+                                  },
+                                  padding: EdgeInsets.zero,
+                                  child: Icon(
+                                    _confirmIsObscure
+                                        ? CupertinoIcons.eye
+                                        : CupertinoIcons.eye_slash,
+                                    color: PlaceholderIconColor,
+                                  ),
+                                ),
+                              ),
+                            ),
                             SizedBox(height: 20),
                             PinkRoundedButton(
-                              title: 'SIGN IN',
+                              title: 'Change password',
                               onTap: _isPressed
                                   ? null
                                   : () {
@@ -116,54 +124,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                       if (formkey.currentState!.validate()) {
                                         FocusScope.of(context).unfocus();
-                                        // context.read<AuthBloc>().add(
-                                        //       Login(
-                                        //         email: _firstController.text,
-                                        //         password:
-                                        //             _secondController.text,
-                                        //       ),
-                                        //     );
-
                                       }
                                       setState(() {
                                         _isPressed = false;
                                       });
                                     },
                             ),
-                            SizedBox(height: 20),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      '/reset_password',
-                                    );
-                                  },
-                                  child: Text(
-                                    'Forgot password?',
-                                    style: MyTextStyle.googleFontWrapper(
-                                      MyTextStyle.TextButtonTextStyle,
-                                    ),
-                                  ),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      '/registration',
-                                    );
-                                  },
-                                  child: Text(
-                                    'SIGN UP',
-                                    style: MyTextStyle.googleFontWrapper(
-                                      MyTextStyle.TextButtonTextStyle,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            SizedBox(height: 70),
                           ],
                         ),
                       ),

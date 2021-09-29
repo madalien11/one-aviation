@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:one_aviation/src/constants/colors.dart';
 import 'package:one_aviation/src/screens/auth/login_screen.dart';
+import 'package:one_aviation/src/screens/auth/new_password_screen.dart';
 import 'package:one_aviation/src/screens/auth/registration_screen.dart';
+import 'package:one_aviation/src/screens/auth/reset_password_screen.dart';
 import 'package:one_aviation/src/screens/home/home_screen.dart';
 import 'package:one_aviation/src/screens/profile/profile_screen.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -67,6 +69,8 @@ class BottomNavigation extends StatelessWidget {
             initialRoute: '/',
             routes: {
               '/registration': (context) => RegistrationScreen(),
+              '/reset_password': (context) => ResetPasswordScreen(),
+              '/new_password': (context) => NewPasswordScreen(),
             },
           ),
         ),

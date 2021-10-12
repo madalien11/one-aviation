@@ -85,4 +85,10 @@ class MyTextStyle {
     height: 1.5,
     fontWeight: FontWeight.w600,
   );
+
+  static const TextStyle ErrorMessageTextStyle = TextStyle(
+    fontSize: 16,
+    color: PrimaryRedColor,
+    fontWeight: FontWeight.w400,
+  );
 }

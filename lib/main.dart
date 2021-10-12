@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 
+import 'src/common/dependencies/injection_container.dart';
 import 'src/constants/material_theme.dart';
 import 'src/routes/routes.dart';
 
@@ -11,6 +12,7 @@ void main() async {
   await Hive.initFlutter();
   await Hive.openBox('tokens');
 
+  initGetIt();
   runApp(MyApp());
 }
 

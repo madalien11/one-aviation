@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:one_aviation/src/common/dependencies/injection_container.dart';
 import 'package:one_aviation/src/constants/colors.dart';
+import 'package:one_aviation/src/screens/auth/bloc/auth_bloc.dart';
 import 'package:one_aviation/src/screens/auth/login_screen.dart';
 import 'package:one_aviation/src/screens/auth/new_password_screen.dart';
 import 'package:one_aviation/src/screens/auth/registration_screen.dart';
@@ -23,7 +26,10 @@ class BottomNavigation extends StatelessWidget {
         HomeScreen(),
         HomeScreen(),
         Hive.box('tokens').get('access') == null
-            ? LoginScreen()
+            ? BlocProvider(
+                create: (context) => AuthBloc(authServices: getIt()),
+                child: LoginScreen(),
+              )
             : ProfileScreen(),
       ];
     }
@@ -68,7 +74,10 @@ class BottomNavigation extends StatelessWidget {
           routeAndNavigatorSettings: RouteAndNavigatorSettings(
             initialRoute: '/',
             routes: {
-              '/registration': (context) => RegistrationScreen(),
+              '/registration': (context) => BlocProvider(
+                    create: (context) => AuthBloc(authServices: getIt()),
+                    child: RegistrationScreen(),
+                  ),
               '/reset_password': (context) => ResetPasswordScreen(),
               '/new_password': (context) => NewPasswordScreen(),
             },

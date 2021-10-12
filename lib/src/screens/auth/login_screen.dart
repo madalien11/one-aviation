@@ -5,6 +5,7 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:one_aviation/src/common/validator/validators.dart';
 import 'package:one_aviation/src/common/widgets/buttons/pink_rounded_button.dart';
 import 'package:one_aviation/src/common/widgets/images/bottom_rounded_image.dart';
+import 'package:one_aviation/src/common/widgets/text/error_message.dart';
 import 'package:one_aviation/src/common/widgets/text_fields/rounded_text_field.dart';
 import 'package:one_aviation/src/constants/colors.dart';
 import 'package:one_aviation/src/constants/spacing.dart';
@@ -24,6 +25,9 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   bool _isPressed = false;
   bool _isLoading = false;
+  bool _showError = false;
+  String _errorMessage = '';
+
   bool _isObscure = true;
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
@@ -43,18 +47,14 @@ class _LoginScreenState extends State<LoginScreen> {
             }
 
             if (state is LoginSuccessful) {
-              // Navigator.pushReplacementNamed(
-              //   context,
-              //   NavigationRoute,
-              // );
               _usernameController.clear();
               _passwordController.clear();
-              // setState(() => _showError = false);
+              setState(() => _showError = false);
             } else if (state is LoginUnsuccessful) {
-              // setState(() {
-              //   _showError = true;
-              //   _errorMessage = state.errorMessage;
-              // });
+              setState(() {
+                _showError = true;
+                _errorMessage = state.errorMessage;
+              });
             }
           },
           child: SafeArea(
@@ -129,30 +129,30 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 20),
+                              _showError
+                                  ? ErrorMessage(errorMessage: _errorMessage)
+                                  : SizedBox(),
+                              SizedBox(height: _showError ? 0 : 20),
                               PinkRoundedButton(
                                 title: 'SIGN IN',
                                 onTap: _isPressed
                                     ? null
                                     : () {
-                                        setState(() {
-                                          _isPressed = true;
-                                        });
+                                        setState(() => _isPressed = true);
 
                                         if (formkey.currentState!.validate()) {
                                           FocusScope.of(context).unfocus();
-                                          // context.read<AuthBloc>().add(
-                                          //       Login(
-                                          //         email: _firstController.text,
-                                          //         password:
-                                          //             _secondController.text,
-                                          //       ),
-                                          //     );
-
+                                          context.read<AuthBloc>().add(
+                                                Login(
+                                                  email:
+                                                      _usernameController.text,
+                                                  password:
+                                                      _passwordController.text,
+                                                ),
+                                              );
                                         }
-                                        setState(() {
-                                          _isPressed = false;
-                                        });
+
+                                        setState(() => _isPressed = false);
                                       },
                               ),
                               SizedBox(height: 20),

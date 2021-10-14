@@ -93,6 +93,7 @@ class AuthorizationImplService implements AuthorizationService {
       );
       var box = Hive.box('tokens');
       await box.put('reset_token', response.data['token']);
+      await box.put('otp', response.data['otp']);
       return {'message': response.data, 'successful': true};
     } on DioError catch (e) {
       // Handle error

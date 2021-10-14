@@ -7,6 +7,7 @@ import 'package:one_aviation/src/constants/colors.dart';
 import 'package:one_aviation/src/screens/auth/bloc/auth_bloc.dart';
 import 'package:one_aviation/src/screens/auth/login_screen.dart';
 import 'package:one_aviation/src/screens/auth/new_password_screen.dart';
+import 'package:one_aviation/src/screens/auth/otp_screen.dart';
 import 'package:one_aviation/src/screens/auth/registration_screen.dart';
 import 'package:one_aviation/src/screens/auth/reset_password_screen.dart';
 import 'package:one_aviation/src/screens/home/home_screen.dart';
@@ -81,6 +82,10 @@ class BottomNavigation extends StatelessWidget {
               '/reset_password': (context) => BlocProvider(
                     create: (context) => AuthBloc(authServices: getIt()),
                     child: ResetPasswordScreen(),
+                  ),
+              '/otp': (context) => BlocProvider(
+                    create: (context) => AuthBloc(authServices: getIt()),
+                    child: OTPScreen(),
                   ),
               '/new_password': (context) => BlocProvider(
                     create: (context) => AuthBloc(authServices: getIt()),

@@ -51,6 +51,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                 setState(() => _showError = false);
                 Navigator.pop(context);
                 Navigator.pop(context);
+                Navigator.pop(context);
                 _passwordController.clear();
                 _confirmPasswordController.clear();
               } else if (state is ResetPasswordUnsuccessful) {

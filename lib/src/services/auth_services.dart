@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:one_aviation/src/common/dio/my_dio.dart';
 
 abstract class AuthorizationService {
@@ -12,6 +13,15 @@ abstract class AuthorizationService {
   });
 
   Future<Map<String, dynamic>> login({
+    required String email,
+    required String password,
+  });
+
+  Future<Map<String, dynamic>> verifyEmail({
+    required String email,
+  });
+
+  Future<Map<String, dynamic>> resetPassword({
     required String email,
     required String password,
   });
@@ -42,7 +52,7 @@ class AuthorizationImplService implements AuthorizationService {
         "phone_number": phoneNumber,
         "sex": isMale ? "male" : "female",
       });
-      return {'message': response.data.toString(), 'successful': true};
+      return {'message': response.data, 'successful': true};
     } on DioError catch (e) {
       // Handle error
       return {
@@ -62,7 +72,51 @@ class AuthorizationImplService implements AuthorizationService {
         'email': email,
         'password': password,
       });
-      return {'message': response.data.toString(), 'successful': true};
+      return {'message': response.data, 'successful': true};
+    } on DioError catch (e) {
+      // Handle error
+      return {
+        'message': e.response!.data['error'].toString(),
+        'successful': false
+      };
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> verifyEmail({
+    required String email,
+  }) async {
+    try {
+      var response = await dio.put(
+        'reset/password/verify',
+        queryParameters: {'email': email},
+      );
+      var box = Hive.box('tokens');
+      await box.put('reset_token', response.data['token']);
+      return {'message': response.data, 'successful': true};
+    } on DioError catch (e) {
+      // Handle error
+      return {
+        'message': e.response!.data['error'].toString(),
+        'successful': false
+      };
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> resetPassword({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      var box = Hive.box('tokens');
+      dio.options.headers['Authorization'] = 'Bearer ${box.get('reset_token')}';
+
+      var response = await dio.put('reset/password', data: {
+        'email': email,
+        'password': password,
+      });
+      return {'message': response.data, 'successful': true};
     } on DioError catch (e) {
       // Handle error
       return {

@@ -20,8 +20,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       yield LoginLoading();
       if (event.email.trim().isNotEmpty && event.password.trim().isNotEmpty) {
         var res = await authServices.login(
-          email: event.email,
-          password: event.password,
+          email: event.email.trim(),
+          password: event.password.trim(),
         );
         if (res['successful']) {
           var box = Hive.box('tokens');
@@ -54,6 +54,35 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         }
       } else {
         yield RegistrationUnsuccessful(errorMessage: 'Заполните все поля');
+      }
+    } else if (event is VerifyEmail) {
+      yield VerifyEmailLoading();
+      if (event.email.trim().isNotEmpty) {
+        var res = await authServices.verifyEmail(
+          email: event.email.trim(),
+        );
+        if (res['successful']) {
+          yield VerifyEmailSuccessful();
+        } else {
+          yield VerifyEmailUnsuccessful(errorMessage: res['message']);
+        }
+      } else {
+        yield VerifyEmailUnsuccessful(errorMessage: 'Заполните все поля');
+      }
+    } else if (event is ResetPassword) {
+      yield ResetPasswordLoading();
+      if (event.email.trim().isNotEmpty && event.password.trim().isNotEmpty) {
+        var res = await authServices.resetPassword(
+          email: event.email.trim(),
+          password: event.password.trim(),
+        );
+        if (res['successful']) {
+          yield ResetPasswordSuccessful();
+        } else {
+          yield ResetPasswordUnsuccessful(errorMessage: res['message']);
+        }
+      } else {
+        yield ResetPasswordUnsuccessful(errorMessage: 'Заполните все поля');
       }
     }
   }

@@ -22,3 +22,21 @@ class RegistrationUnsuccessful extends AuthState {
 }
 
 class RegistrationSuccessful extends AuthState {}
+
+class VerifyEmailLoading extends AuthState {}
+
+class VerifyEmailUnsuccessful extends AuthState {
+  VerifyEmailUnsuccessful({required this.errorMessage});
+  final String errorMessage;
+}
+
+class VerifyEmailSuccessful extends AuthState {}
+
+class ResetPasswordLoading extends AuthState {}
+
+class ResetPasswordUnsuccessful extends AuthState {
+  ResetPasswordUnsuccessful({required this.errorMessage});
+  final String errorMessage;
+}
+
+class ResetPasswordSuccessful extends AuthState {}

@@ -25,3 +25,14 @@ class Register extends AuthEvent {
   final String phoneNumber;
   final bool isMale;
 }
+
+class VerifyEmail extends AuthEvent {
+  VerifyEmail({required this.email});
+  final String email;
+}
+
+class ResetPassword extends AuthEvent {
+  ResetPassword({required this.email, required this.password});
+  final String email;
+  final String password;
+}

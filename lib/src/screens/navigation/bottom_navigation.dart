@@ -78,8 +78,14 @@ class BottomNavigation extends StatelessWidget {
                     create: (context) => AuthBloc(authServices: getIt()),
                     child: RegistrationScreen(),
                   ),
-              '/reset_password': (context) => ResetPasswordScreen(),
-              '/new_password': (context) => NewPasswordScreen(),
+              '/reset_password': (context) => BlocProvider(
+                    create: (context) => AuthBloc(authServices: getIt()),
+                    child: ResetPasswordScreen(),
+                  ),
+              '/new_password': (context) => BlocProvider(
+                    create: (context) => AuthBloc(authServices: getIt()),
+                    child: NewPasswordScreen(),
+                  ),
             },
           ),
         ),

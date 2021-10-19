@@ -91,4 +91,18 @@ class MyTextStyle {
     color: PrimaryRedColor,
     fontWeight: FontWeight.w400,
   );
+
+  static const TextStyle ProfilePlaceholderTextStyle = TextStyle(
+    fontSize: 36,
+    color: PrimaryOrangeColor,
+    fontWeight: FontWeight.w600,
+    decoration: TextDecoration.underline,
+  );
+
+  static const TextStyle DarkTitleTextStyle = TextStyle(
+    color: PrimaryDarkTextColor,
+    fontSize: 18,
+    fontWeight: FontWeight.w500,
+    height: 1.5,
+  );
 }

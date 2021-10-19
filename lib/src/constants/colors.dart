@@ -10,3 +10,4 @@ const Color PlaceholderIconColor = Color(0xffE1E1E1);
 const Color SeaplanesTitleTextColor = Color(0xffffffff);
 const Color BlackTitleTextColor = Color(0xff000000);
 const Color WhiteTitleTextColor = Color(0xffffffff);
+const Color DividerColor = Color(0xfff4f4f4);

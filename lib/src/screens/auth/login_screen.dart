@@ -10,6 +10,7 @@ import 'package:one_aviation/src/common/widgets/text_fields/rounded_text_field.d
 import 'package:one_aviation/src/constants/colors.dart';
 import 'package:one_aviation/src/constants/spacing.dart';
 import 'package:one_aviation/src/constants/text_styles.dart';
+import 'package:one_aviation/src/screens/profile/profile_screen.dart';
 
 import 'bloc/auth_bloc.dart';
 
@@ -50,6 +51,10 @@ class _LoginScreenState extends State<LoginScreen> {
               _usernameController.clear();
               _passwordController.clear();
               setState(() => _showError = false);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => ProfileScreen()),
+              );
             } else if (state is LoginUnsuccessful) {
               setState(() {
                 _showError = true;

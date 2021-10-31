@@ -105,4 +105,40 @@ class MyTextStyle {
     fontWeight: FontWeight.w500,
     height: 1.5,
   );
+
+  static const TextStyle AppBarTextStyle = TextStyle(
+    fontSize: 18,
+    color: AppBarTextColor,
+    fontWeight: FontWeight.w500,
+  );
+
+  static const TextStyle MyOrdersCardPriceTextStyle = TextStyle(
+    fontSize: 14,
+    color: PrimaryOrangeColor,
+    fontWeight: FontWeight.w600,
+  );
+
+  static const TextStyle MyOrdersCardTimeTextStyle = TextStyle(
+    fontSize: 18,
+    color: BlackTitleTextColor,
+    fontWeight: FontWeight.w500,
+  );
+
+  static const TextStyle MyOrdersCardCodeTextStyle = TextStyle(
+    fontSize: 12,
+    color: BlackTitleTextColor,
+    fontWeight: FontWeight.w400,
+  );
+
+  static const TextStyle MyOrdersCardDurationTextStyle = TextStyle(
+    fontSize: 10,
+    color: PrimaryBlueColor,
+    fontWeight: FontWeight.w400,
+  );
+
+  static const TextStyle MyOrdersCardTypeTextStyle = TextStyle(
+    fontSize: 10,
+    color: PrimaryPinkColor,
+    fontWeight: FontWeight.w400,
+  );
 }

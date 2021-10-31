@@ -9,6 +9,7 @@ import 'package:one_aviation/src/constants/spacing.dart';
 import 'package:one_aviation/src/constants/text_styles.dart';
 import 'package:one_aviation/src/screens/auth/bloc/auth_bloc.dart';
 import 'package:one_aviation/src/screens/auth/login_screen.dart';
+import 'package:one_aviation/src/screens/my_orders/my_orders_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -81,7 +82,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ProfileButton(
                 title: 'Orders',
                 onTap: () {
-                  print('Profile tab');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyOrdersScreen()),
+                  );
                 },
                 icon: Icons.airplane_ticket,
               ),
@@ -170,5 +174,3 @@ class ProfileButton extends StatelessWidget {
   }
 }
 
-
-// https://docs.google.com/document/d/1RqPDVZv2pKw3BkcLQXh_oz5SDLZ08eTW3y-29KzgcO4/edit#

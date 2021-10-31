@@ -47,15 +47,15 @@ class BottomNavigation extends StatelessWidget {
         ),
         PersistentBottomNavBarItem(
           icon: RotationTransition(
-            turns: AlwaysStoppedAnimation(30 / 360),
+            turns: AlwaysStoppedAnimation(90 / 360),
             child: Icon(
               Icons.airplanemode_active,
-              color: PrimaryDarkTextColor,
+              color: PrimaryBlueColor,
               size: 30,
             ),
           ),
           inactiveIcon: RotationTransition(
-            turns: AlwaysStoppedAnimation(30 / 360),
+            turns: AlwaysStoppedAnimation(90 / 360),
             child: Icon(
               Icons.airplanemode_active,
               color: PlaceholderIconColor,

@@ -9,7 +9,8 @@ import 'package:one_aviation/src/constants/spacing.dart';
 import 'package:one_aviation/src/constants/text_styles.dart';
 import 'package:one_aviation/src/screens/auth/bloc/auth_bloc.dart';
 import 'package:one_aviation/src/screens/auth/login_screen.dart';
-import 'package:one_aviation/src/screens/my_orders/my_orders_screen.dart';
+
+import 'my_orders/my_orders_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -173,4 +174,3 @@ class ProfileButton extends StatelessWidget {
     );
   }
 }
-

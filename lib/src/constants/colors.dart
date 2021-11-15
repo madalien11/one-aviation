@@ -16,4 +16,6 @@ const Color AppBarBackgroundColor = Color(0xffffffff);
 const Color AppBarTextColor = Color(0xff000000);
 const Color DividerColor = Color(0xfff4f4f4);
 
+const Color ContainerBackgroundColor = Color(0xfffafafa);
+
 const Color MyOrderCardBackgroundColor = Color(0xffffffff);

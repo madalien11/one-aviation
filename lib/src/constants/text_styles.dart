@@ -30,6 +30,12 @@ class MyTextStyle {
     fontWeight: FontWeight.w600,
   );
 
+  static const TextStyle SmallerTitleTextStyle = TextStyle(
+    fontSize: 16,
+    color: BlackTitleTextColor,
+    fontWeight: FontWeight.w500,
+  );
+
   static const TextStyle OneAviationTitleTextStyle = TextStyle(
     fontSize: 18,
     color: BlackTitleTextColor,
@@ -138,6 +144,18 @@ class MyTextStyle {
 
   static const TextStyle MyOrdersCardTypeTextStyle = TextStyle(
     fontSize: 10,
+    color: PrimaryPinkColor,
+    fontWeight: FontWeight.w400,
+  );
+
+  static const TextStyle UnderscoredTextButtonTextStyle = TextStyle(
+    fontSize: 15,
+    color: WhiteTitleTextColor,
+    fontWeight: FontWeight.w600,
+  );
+
+  static const TextStyle RadioButtonTextStyle = TextStyle(
+    fontSize: 14,
     color: PrimaryPinkColor,
     fontWeight: FontWeight.w400,
   );

@@ -169,7 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     onPressed: () {
                                       Navigator.pushNamed(
                                         context,
-                                        '/reset_password',
+                                        '/profile/reset_password',
                                       );
                                     },
                                     child: Text(
@@ -183,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     onPressed: () {
                                       Navigator.pushNamed(
                                         context,
-                                        '/registration',
+                                        '/profile/registration',
                                       );
                                     },
                                     child: Text(

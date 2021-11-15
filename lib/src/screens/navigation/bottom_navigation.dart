@@ -10,7 +10,10 @@ import 'package:one_aviation/src/screens/auth/new_password_screen.dart';
 import 'package:one_aviation/src/screens/auth/otp_screen.dart';
 import 'package:one_aviation/src/screens/auth/registration_screen.dart';
 import 'package:one_aviation/src/screens/auth/reset_password_screen.dart';
+import 'package:one_aviation/src/screens/flight/flight_screen.dart';
 import 'package:one_aviation/src/screens/home/home_screen.dart';
+import 'package:one_aviation/src/screens/map/bloc/location_bloc.dart';
+import 'package:one_aviation/src/screens/map/map_screen.dart';
 import 'package:one_aviation/src/screens/profile/profile_screen.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
@@ -25,7 +28,7 @@ class BottomNavigation extends StatelessWidget {
     List<Widget> _buildScreens() {
       return [
         HomeScreen(),
-        HomeScreen(),
+        FlightScreen(),
         Hive.box('tokens').get('access') == null
             ? BlocProvider(
                 create: (context) => AuthBloc(authServices: getIt()),
@@ -64,6 +67,15 @@ class BottomNavigation extends StatelessWidget {
           ),
           activeColorPrimary: CupertinoColors.white,
           inactiveColorPrimary: PlaceholderIconColor,
+          routeAndNavigatorSettings: RouteAndNavigatorSettings(
+            initialRoute: '/flight',
+            routes: {
+              '/flight/map': (context) => BlocProvider(
+                    create: (context) => LocationBloc(locationService: getIt()),
+                    child: MapScreen(),
+                  ),
+            },
+          ),
         ),
         PersistentBottomNavBarItem(
           icon: Icon(
@@ -73,21 +85,21 @@ class BottomNavigation extends StatelessWidget {
           activeColorPrimary: PrimaryDarkTextColor,
           inactiveColorPrimary: PlaceholderIconColor,
           routeAndNavigatorSettings: RouteAndNavigatorSettings(
-            initialRoute: '/',
+            initialRoute: '/profile',
             routes: {
-              '/registration': (context) => BlocProvider(
+              '/profile/registration': (context) => BlocProvider(
                     create: (context) => AuthBloc(authServices: getIt()),
                     child: RegistrationScreen(),
                   ),
-              '/reset_password': (context) => BlocProvider(
+              '/profile/reset_password': (context) => BlocProvider(
                     create: (context) => AuthBloc(authServices: getIt()),
                     child: ResetPasswordScreen(),
                   ),
-              '/otp': (context) => BlocProvider(
+              '/profile/otp': (context) => BlocProvider(
                     create: (context) => AuthBloc(authServices: getIt()),
                     child: OTPScreen(),
                   ),
-              '/new_password': (context) => BlocProvider(
+              '/profile/new_password': (context) => BlocProvider(
                     create: (context) => AuthBloc(authServices: getIt()),
                     child: NewPasswordScreen(),
                   ),

@@ -98,7 +98,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                       setState(() => _showError = false);
                                       _otpController.clear();
                                       Navigator.pushNamed(
-                                          context, '/new_password');
+                                          context, '/profile/new_password');
                                     } else {
                                       setState(() {
                                         _showError = true;

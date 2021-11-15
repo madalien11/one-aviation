@@ -49,7 +49,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 userEmail = _emailController.text;
                 setState(() => _showError = false);
                 _emailController.clear();
-                Navigator.pushNamed(context, '/otp');
+                Navigator.pushNamed(context, '/profile/otp');
               } else if (state is VerifyEmailUnsuccessful) {
                 setState(() {
                   _showError = true;

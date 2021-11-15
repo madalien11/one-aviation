@@ -27,6 +27,8 @@ class _FlightScreenState extends State<FlightScreen> {
 
   String from = "From";
   String to = "To";
+  String departure = "Departure";
+  String returnDate = "Return";
 
   @override
   Widget build(BuildContext context) {
@@ -136,20 +138,31 @@ class _FlightScreenState extends State<FlightScreen> {
         ),
         if (val == 1)
           FlightDataInputRow(
-            title: 'Date',
-            firstText: 'Departure',
-            firstIcon: Icons.calendar_today_outlined,
-            firstTextController: _departureTextController,
-            secondText: 'Return',
-            secondIcon: Icons.calendar_today_outlined,
-            secondTextController: _returnTextController,
-          ),
+              title: 'Date',
+              firstText: departure,
+              firstIcon: Icons.calendar_today_outlined,
+              firstTextController: _departureTextController,
+              firstChanged: departure != 'Departure',
+              firstOnTap: () {
+                dateTimePicker(true);
+              },
+              secondText: returnDate,
+              secondIcon: Icons.calendar_today_outlined,
+              secondTextController: _returnTextController,
+              secondChanged: returnDate != 'Return',
+              secondOnTap: () {
+                dateTimePicker(false);
+              }),
         if (val == 2)
           FlightDataInputRow(
             title: 'Date',
-            firstText: 'Departure',
+            firstText: departure,
             firstIcon: Icons.calendar_today_outlined,
             firstTextController: _departureTextController,
+            firstChanged: departure != 'Departure',
+            firstOnTap: () {
+              dateTimePicker(true);
+            },
           ),
         if (isFirst)
           FlightDataInputRow(
@@ -181,5 +194,43 @@ class _FlightScreenState extends State<FlightScreen> {
         SizedBox(height: 60),
       ],
     );
+  }
+
+  dateTimePicker(bool isDeparture) async {
+    final initialDate = isDeparture
+        ? DateTime.now()
+        : DateTime.now().add(
+            Duration(days: 1),
+          );
+
+    final date = await showDatePicker(
+      context: context,
+      firstDate: isDeparture
+          ? DateTime.now()
+          : DateTime.now().add(
+              Duration(days: 1),
+            ),
+      lastDate: isDeparture
+          ? DateTime.now().add(Duration(days: 120))
+          : DateTime.now().add(Duration(days: 121)),
+      initialDate: initialDate,
+    );
+    if (date != null) {
+      final initialTime = TimeOfDay.now();
+      final time = await showTimePicker(
+        context: context,
+        initialTime: initialTime,
+      );
+
+      if (time != null) {
+        isDeparture
+            ? setState(() => departure = date
+                .add(Duration(hours: time.hour, minutes: time.minute))
+                .toString())
+            : setState(() => returnDate = date
+                .add(Duration(hours: time.hour, minutes: time.minute))
+                .toString());
+      }
+    }
   }
 }

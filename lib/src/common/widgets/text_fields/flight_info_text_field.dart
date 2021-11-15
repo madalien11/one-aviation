@@ -11,6 +11,7 @@ class FlightInfoTextField extends StatelessWidget {
     required this.controller,
     this.keyboardType = TextInputType.text,
     this.onTap,
+    this.changed = false,
   }) : super(key: key);
 
   final String hintText;
@@ -18,6 +19,7 @@ class FlightInfoTextField extends StatelessWidget {
   final TextEditingController controller;
   final TextInputType keyboardType;
   final Function? onTap;
+  final bool changed;
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +46,13 @@ class FlightInfoTextField extends StatelessWidget {
             borderSide: BorderSide(color: PrimaryRedColor),
           ),
           hintText: hintText,
-          hintStyle: MyTextStyle.googleFontWrapper(
-            MyTextStyle.PlaceholderTextStyle.copyWith(fontSize: 14),
-          ),
+          hintStyle: changed
+              ? MyTextStyle.googleFontWrapper(
+                  MyTextStyle.TextFieldTextStyle,
+                )
+              : MyTextStyle.googleFontWrapper(
+                  MyTextStyle.PlaceholderTextStyle.copyWith(fontSize: 14),
+                ),
           prefixIcon: Icon(
             icon,
             color: PlaceholderIconColor,

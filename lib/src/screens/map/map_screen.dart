@@ -71,13 +71,16 @@ class _MapScreenState extends State<MapScreen> {
             ? Center(child: CupertinoActivityIndicator())
             : _showError
                 ? Center(child: Text(_errorMessage))
-                : GoogleMap(
-                    onMapCreated: _onMapCreated,
-                    initialCameraPosition: const CameraPosition(
-                      target: LatLng(41, 2),
-                      zoom: 5,
+                : Padding(
+                    padding: const EdgeInsets.only(bottom: 30),
+                    child: GoogleMap(
+                      onMapCreated: _onMapCreated,
+                      initialCameraPosition: const CameraPosition(
+                        target: LatLng(41, 2),
+                        zoom: 5,
+                      ),
+                      markers: _markers.values.toSet(),
                     ),
-                    markers: _markers.values.toSet(),
                   ),
       ),
     );

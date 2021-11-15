@@ -9,11 +9,13 @@ class FlightDataInputRow extends StatelessWidget {
     required this.firstText,
     required this.firstIcon,
     required this.firstTextController,
+    this.firstChanged = false,
     this.firstOnTap,
     this.secondText,
     this.secondIcon,
     this.secondTextController,
     this.secondOnTap,
+    this.secondChanged = false,
   }) : super(key: key);
 
   final String title;
@@ -21,10 +23,12 @@ class FlightDataInputRow extends StatelessWidget {
   final IconData firstIcon;
   final TextEditingController firstTextController;
   final Function? firstOnTap;
+  final bool firstChanged;
   final String? secondText;
   final IconData? secondIcon;
   final TextEditingController? secondTextController;
   final Function? secondOnTap;
+  final bool secondChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +51,7 @@ class FlightDataInputRow extends StatelessWidget {
                 hintText: firstText,
                 controller: firstTextController,
                 icon: firstIcon,
+                changed: firstChanged,
                 keyboardType: title == 'Passengers'
                     ? TextInputType.number
                     : TextInputType.text,
@@ -63,6 +68,7 @@ class FlightDataInputRow extends StatelessWidget {
                   hintText: secondText!,
                   controller: secondTextController!,
                   icon: secondIcon!,
+                  changed: secondChanged,
                 ),
               ),
           ],

@@ -120,6 +120,7 @@ class _FlightScreenState extends State<FlightScreen> {
           firstText: from,
           firstIcon: Icons.flight_takeoff_rounded,
           firstTextController: _fromTextController,
+          firstChanged: from != 'From',
           firstOnTap: () async {
             var data = await Navigator.pushNamed(context, '/flight/map');
             if (data != null) setState(() => from = data.toString());
@@ -127,6 +128,7 @@ class _FlightScreenState extends State<FlightScreen> {
           secondText: to,
           secondIcon: Icons.flight_land_rounded,
           secondTextController: _toTextController,
+          secondChanged: to != 'To',
           secondOnTap: () async {
             var data = await Navigator.pushNamed(context, '/flight/map');
             if (data != null) setState(() => to = data.toString());

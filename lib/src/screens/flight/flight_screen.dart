@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:one_aviation/src/common/utils/date_formater.dart';
+import 'package:one_aviation/src/common/utils/date_time_picker.dart';
 import 'package:one_aviation/src/common/widgets/buttons/pink_rounded_button.dart';
 import 'package:one_aviation/src/common/widgets/text/error_message.dart';
 import 'package:one_aviation/src/constants/colors.dart';
@@ -174,8 +175,13 @@ class _FlightScreenState extends State<FlightScreen> {
               firstIcon: Icons.calendar_today_outlined,
               firstTextController: _departureTextController,
               firstChanged: departure != 'Departure',
-              firstOnTap: () {
-                dateTimePicker(isSearch: isFirst);
+              firstOnTap: () async {
+                String res = await dateTimePicker(
+                  context,
+                  departure,
+                  isSearch: isFirst,
+                );
+                setState(() => departure = res);
               },
               secondText: returnDate != 'Return'
                   ? dateFormatter(DateTime.parse(returnDate))
@@ -183,8 +189,14 @@ class _FlightScreenState extends State<FlightScreen> {
               secondIcon: Icons.calendar_today_outlined,
               secondTextController: _returnTextController,
               secondChanged: returnDate != 'Return',
-              secondOnTap: () {
-                dateTimePicker(isDeparture: false, isSearch: isFirst);
+              secondOnTap: () async {
+                String res = await dateTimePicker(
+                  context,
+                  departure,
+                  isDeparture: false,
+                  isSearch: isFirst,
+                );
+                setState(() => returnDate = res);
               }),
         if (val == 2)
           FlightDataInputRow(
@@ -195,8 +207,13 @@ class _FlightScreenState extends State<FlightScreen> {
             firstIcon: Icons.calendar_today_outlined,
             firstTextController: _departureTextController,
             firstChanged: departure != 'Departure',
-            firstOnTap: () {
-              dateTimePicker(isSearch: isFirst);
+            firstOnTap: () async {
+              String res = await dateTimePicker(
+                context,
+                departure,
+                isSearch: isFirst,
+              );
+              setState(() => departure = res);
             },
           ),
         if (isFirst)
@@ -268,59 +285,5 @@ class _FlightScreenState extends State<FlightScreen> {
         SizedBox(height: 60),
       ],
     );
-  }
-
-  dateTimePicker({bool isDeparture = true, bool isSearch = true}) async {
-    final initialDate = isDeparture
-        ? DateTime.now()
-        : departure != 'Departure'
-            ? DateTime.parse(departure).add(
-                Duration(days: 1),
-              )
-            : DateTime.now().add(
-                Duration(days: 1),
-              );
-
-    final date = await showDatePicker(
-      context: context,
-      firstDate: isDeparture
-          ? DateTime.now()
-          : departure != 'Departure'
-              ? DateTime.parse(departure).add(
-                  Duration(days: 1),
-                )
-              : DateTime.now().add(Duration(days: 1)),
-      lastDate: isDeparture
-          ? DateTime.now().add(Duration(days: 120))
-          : departure != 'Departure'
-              ? DateTime.parse(departure).add(Duration(days: 121))
-              : DateTime.now().add(Duration(days: 121)),
-      initialDate: initialDate,
-    );
-    if (date != null) {
-      if (!isSearch) {
-        final initialTime = TimeOfDay.now();
-        final time = await showTimePicker(
-          context: context,
-          initialTime: initialTime,
-        );
-
-        if (time != null) {
-          isDeparture
-              ? setState(() => departure = date
-                      .add(Duration(hours: time.hour, minutes: time.minute))
-                      .toIso8601String() +
-                  'Z')
-              : setState(() => returnDate = date
-                      .add(Duration(hours: time.hour, minutes: time.minute))
-                      .toIso8601String() +
-                  'Z');
-        }
-      } else {
-        isDeparture
-            ? setState(() => departure = date.toIso8601String() + 'Z')
-            : setState(() => returnDate = date.toIso8601String() + 'Z');
-      }
-    }
   }
 }

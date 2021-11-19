@@ -1,14 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:one_aviation/src/common/utils/date_formater.dart';
 import 'package:one_aviation/src/constants/colors.dart';
 import 'package:one_aviation/src/constants/text_styles.dart';
+import 'package:one_aviation/src/models/search_flight/found_flight_model.dart';
 
 class OneDirectionData extends StatelessWidget {
   const OneDirectionData({
     Key? key,
+    required this.foundFlightModel,
+    required this.fromPortName,
+    required this.toPortName,
   }) : super(key: key);
+
+  final FoundFlightModel foundFlightModel;
+  final String fromPortName;
+  final String toPortName;
 
   @override
   Widget build(BuildContext context) {
+    Duration duration =
+        foundFlightModel.arrivalTime.difference(foundFlightModel.departureTime);
+    print(duration);
     return Row(
       children: [
         SizedBox(width: 28),
@@ -17,14 +29,14 @@ class OneDirectionData extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              '06:50',
+              timeFormatter(foundFlightModel.departureTime),
               style: MyTextStyle.googleFontWrapper(
                 MyTextStyle.MyOrdersCardTimeTextStyle,
               ),
             ),
             SizedBox(height: 4),
             Text(
-              'FLR',
+              fromPortName,
               style: MyTextStyle.googleFontWrapper(
                 MyTextStyle.MyOrdersCardCodeTextStyle,
               ),
@@ -38,7 +50,7 @@ class OneDirectionData extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                '1h 50m',
+                timeDurationFormatter(DateTime(0).add(duration)),
                 style: MyTextStyle.googleFontWrapper(
                   MyTextStyle.MyOrdersCardDurationTextStyle,
                 ),
@@ -72,14 +84,14 @@ class OneDirectionData extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              '06:50',
+              timeFormatter(foundFlightModel.arrivalTime),
               style: MyTextStyle.googleFontWrapper(
                 MyTextStyle.MyOrdersCardTimeTextStyle,
               ),
             ),
             SizedBox(height: 4),
             Text(
-              'FLR',
+              toPortName,
               style: MyTextStyle.googleFontWrapper(
                 MyTextStyle.MyOrdersCardCodeTextStyle,
               ),

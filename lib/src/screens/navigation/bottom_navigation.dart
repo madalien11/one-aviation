@@ -10,7 +10,9 @@ import 'package:one_aviation/src/screens/auth/new_password_screen.dart';
 import 'package:one_aviation/src/screens/auth/otp_screen.dart';
 import 'package:one_aviation/src/screens/auth/registration_screen.dart';
 import 'package:one_aviation/src/screens/auth/reset_password_screen.dart';
+import 'package:one_aviation/src/screens/flight/bloc/flights_bloc.dart';
 import 'package:one_aviation/src/screens/flight/flight_screen.dart';
+import 'package:one_aviation/src/screens/flight/found_flights/found_flights_screen.dart';
 import 'package:one_aviation/src/screens/home/home_screen.dart';
 import 'package:one_aviation/src/screens/map/bloc/location_bloc.dart';
 import 'package:one_aviation/src/screens/map/map_screen.dart';
@@ -28,7 +30,10 @@ class BottomNavigation extends StatelessWidget {
     List<Widget> _buildScreens() {
       return [
         HomeScreen(),
-        FlightScreen(),
+        BlocProvider(
+          create: (context) => FlightsBloc(flightServices: getIt()),
+          child: FlightScreen(),
+        ),
         Hive.box('tokens').get('access') == null
             ? BlocProvider(
                 create: (context) => AuthBloc(authServices: getIt()),
@@ -73,6 +78,10 @@ class BottomNavigation extends StatelessWidget {
               '/flight/map': (context) => BlocProvider(
                     create: (context) => LocationBloc(locationService: getIt()),
                     child: MapScreen(),
+                  ),
+              '/flight/search': (context) => BlocProvider(
+                    create: (context) => FlightsBloc(flightServices: getIt()),
+                    child: FoundFlightsScreen(),
                   ),
             },
           ),

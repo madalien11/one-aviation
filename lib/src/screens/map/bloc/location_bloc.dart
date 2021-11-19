@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:one_aviation/src/models/port_location_model.dart';
+import 'package:one_aviation/src/models/ports/port_location_model.dart';
 import 'package:one_aviation/src/services/location_services.dart';
 
 part 'location_event.dart';

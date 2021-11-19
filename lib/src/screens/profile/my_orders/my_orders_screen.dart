@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:one_aviation/src/constants/colors.dart';
 import 'package:one_aviation/src/constants/spacing.dart';
 import 'package:one_aviation/src/constants/text_styles.dart';
+import 'package:one_aviation/src/models/location_coords_model.dart';
+import 'package:one_aviation/src/models/search_flight/found_flight_model.dart';
 
 import 'widgets/my_order_card.dart';
 
@@ -40,7 +42,28 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
           padding: paddingAll20,
           child: ListView.builder(
             itemBuilder: (context, i) {
-              return MyOrderCard();
+              return MyOrderCard(
+                foundFlightModel: FoundFlightModel(
+                  id: 69,
+                  departureTime: DateTime.now(),
+                  arrivalTime: DateTime.now().add(
+                    Duration(hours: 3, minutes: 15),
+                  ),
+                  availableSeats: 3,
+                  price: '2500',
+                  from: LocationCoordsModel(
+                    latitude: 44.093484,
+                    longitude: 11.495894,
+                  ),
+                  to: LocationCoordsModel(
+                    latitude: 42.395839,
+                    longitude: 12.093458,
+                  ),
+                  status: 'Active',
+                ),
+                fromPortName: 'FLR',
+                toPortName: 'CDG',
+              );
             },
             itemCount: 5,
           ),

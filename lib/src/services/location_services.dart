@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:one_aviation/src/common/dio/my_dio.dart';
-import 'package:one_aviation/src/models/port_location_model.dart';
+import 'package:one_aviation/src/models/ports/port_location_model.dart';
 
 abstract class LocationService {
   Future<Map<List<PortLocaitonModel>?, String>?> getPorts();

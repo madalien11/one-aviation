@@ -1,0 +1,18 @@
+part of 'flights_bloc.dart';
+
+@immutable
+abstract class FlightsState {}
+
+class FlightsInitial extends FlightsState {}
+
+class SearchFlightsLoading extends FlightsState {}
+
+class SearchFlightsSuccessful extends FlightsState {
+  SearchFlightsSuccessful({required this.foundFlights});
+  final List<FoundFlightModel> foundFlights;
+}
+
+class SearchFlightsUnsuccessful extends FlightsState {
+  SearchFlightsUnsuccessful({required this.errorMessage});
+  final String errorMessage;
+}

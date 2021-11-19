@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:one_aviation/src/common/utils/price_formatter.dart';
 import 'package:one_aviation/src/constants/colors.dart';
 import 'package:one_aviation/src/constants/text_styles.dart';
+import 'package:one_aviation/src/models/search_flight/found_flight_model.dart';
 
 import 'one_direction_data.dart';
 
 class MyOrderCard extends StatelessWidget {
   const MyOrderCard({
     Key? key,
+    required this.foundFlightModel,
+    required this.fromPortName,
+    required this.toPortName,
   }) : super(key: key);
+
+  final FoundFlightModel foundFlightModel;
+  final String fromPortName;
+  final String toPortName;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 250,
+      height: 150,
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
@@ -31,18 +40,18 @@ class MyOrderCard extends StatelessWidget {
         children: [
           Expanded(
             flex: 2,
-            child: OneDirectionData(),
-          ),
-          Expanded(
-            flex: 2,
-            child: OneDirectionData(),
+            child: OneDirectionData(
+              foundFlightModel: foundFlightModel,
+              fromPortName: fromPortName,
+              toPortName: toPortName,
+            ),
           ),
           Expanded(
             child: Row(
               children: [
                 Spacer(),
                 Text(
-                  '€ 1000',
+                  priceFormatter(foundFlightModel.price),
                   style: MyTextStyle.googleFontWrapper(
                     MyTextStyle.MyOrdersCardPriceTextStyle,
                   ),

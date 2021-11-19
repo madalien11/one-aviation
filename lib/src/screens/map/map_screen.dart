@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:one_aviation/src/models/port_location_model.dart';
+import 'package:one_aviation/src/models/ports/port_location_model.dart';
 
 import 'bloc/location_bloc.dart';
 
@@ -31,7 +31,7 @@ class _MapScreenState extends State<MapScreen> {
             title: port.name,
             // snippet: port.address,
             onTap: () {
-              Navigator.pop(context, port.name);
+              Navigator.pop(context, port);
             },
           ),
         );

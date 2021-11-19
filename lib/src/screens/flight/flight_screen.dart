@@ -1,14 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:one_aviation/src/common/utils/date_formater.dart';
 import 'package:one_aviation/src/common/widgets/buttons/pink_rounded_button.dart';
+import 'package:one_aviation/src/common/widgets/text/error_message.dart';
 import 'package:one_aviation/src/constants/colors.dart';
 import 'package:one_aviation/src/constants/spacing.dart';
 import 'package:one_aviation/src/constants/text_styles.dart';
+import 'package:one_aviation/src/models/location_coords_model.dart';
+import 'package:one_aviation/src/models/ports/port_location_model.dart';
+import 'package:one_aviation/src/models/search_flight/search_flight_model.dart';
 
 import 'widgets/flight_data_input_row.dart';
 import 'widgets/flight_screen_image.dart';
 import 'widgets/options_buttons.dart';
 import 'widgets/radio_buttons.dart';
+
+SearchFlightModel? globalSearchFlightData;
+String fromPortName = "From";
+String toPortName = "To";
 
 class FlightScreen extends StatefulWidget {
   @override
@@ -25,10 +34,14 @@ class _FlightScreenState extends State<FlightScreen> {
   final _passengersTextController = TextEditingController();
   bool checkedValue = false;
 
-  String from = "From";
-  String to = "To";
+  PortLocaitonModel? fromPort;
+  PortLocaitonModel? toPort;
+
   String departure = "Departure";
   String returnDate = "Return";
+
+  bool _showError = false;
+  String _errorMessage = 'Fill in all the fields';
 
   @override
   Widget build(BuildContext context) {
@@ -54,12 +67,18 @@ class _FlightScreenState extends State<FlightScreen> {
                         setState(() {
                           _options[0] = true;
                           _options[1] = false;
+                          departure = "Departure";
+                          returnDate = "Return";
+                          FocusScope.of(context).unfocus();
                         });
                       },
                       () {
                         setState(() {
                           _options[0] = false;
                           _options[1] = true;
+                          departure = "Departure";
+                          returnDate = "Return";
+                          FocusScope.of(context).unfocus();
                         });
                       },
                     ],
@@ -119,49 +138,65 @@ class _FlightScreenState extends State<FlightScreen> {
         ),
         FlightDataInputRow(
           title: 'Location',
-          firstText: from,
+          firstText: fromPortName,
           firstIcon: Icons.flight_takeoff_rounded,
           firstTextController: _fromTextController,
-          firstChanged: from != 'From',
+          firstChanged: fromPortName != 'From',
           firstOnTap: () async {
-            var data = await Navigator.pushNamed(context, '/flight/map');
-            if (data != null) setState(() => from = data.toString());
+            dynamic data = await Navigator.pushNamed(context, '/flight/map')
+                as PortLocaitonModel;
+            if (data != null)
+              setState(() {
+                fromPortName = data.name.toString();
+                fromPort = data;
+              });
           },
-          secondText: to,
+          secondText: toPortName,
           secondIcon: Icons.flight_land_rounded,
           secondTextController: _toTextController,
-          secondChanged: to != 'To',
+          secondChanged: toPortName != 'To',
           secondOnTap: () async {
-            var data = await Navigator.pushNamed(context, '/flight/map');
-            if (data != null) setState(() => to = data.toString());
+            dynamic data = await Navigator.pushNamed(context, '/flight/map')
+                as PortLocaitonModel;
+            if (data != null)
+              setState(() {
+                toPortName = data.name.toString();
+                toPort = data;
+              });
           },
         ),
         if (val == 1)
           FlightDataInputRow(
               title: 'Date',
-              firstText: departure,
+              firstText: departure != 'Departure'
+                  ? dateFormatter(DateTime.parse(departure))
+                  : departure,
               firstIcon: Icons.calendar_today_outlined,
               firstTextController: _departureTextController,
               firstChanged: departure != 'Departure',
               firstOnTap: () {
-                dateTimePicker(true);
+                dateTimePicker(isSearch: isFirst);
               },
-              secondText: returnDate,
+              secondText: returnDate != 'Return'
+                  ? dateFormatter(DateTime.parse(returnDate))
+                  : returnDate,
               secondIcon: Icons.calendar_today_outlined,
               secondTextController: _returnTextController,
               secondChanged: returnDate != 'Return',
               secondOnTap: () {
-                dateTimePicker(false);
+                dateTimePicker(isDeparture: false, isSearch: isFirst);
               }),
         if (val == 2)
           FlightDataInputRow(
             title: 'Date',
-            firstText: departure,
+            firstText: departure != 'Departure'
+                ? dateFormatter(DateTime.parse(departure))
+                : departure,
             firstIcon: Icons.calendar_today_outlined,
             firstTextController: _departureTextController,
             firstChanged: departure != 'Departure',
             firstOnTap: () {
-              dateTimePicker(true);
+              dateTimePicker(isSearch: isFirst);
             },
           ),
         if (isFirst)
@@ -179,57 +214,112 @@ class _FlightScreenState extends State<FlightScreen> {
             activeColor: PrimaryDarkTextColor,
             value: checkedValue,
             onChanged: (newValue) {
-              setState(() {
-                checkedValue = newValue ?? false;
-              });
+              setState(() => checkedValue = newValue ?? false);
             },
             controlAffinity:
                 ListTileControlAffinity.leading, //  <-- leading Checkbox
           ),
+        _showError ? ErrorMessage(errorMessage: _errorMessage) : SizedBox(),
         SizedBox(height: 10),
         PinkRoundedButton(
           title: isFirst ? 'Search Flights' : 'Continue',
-          onTap: () {},
+          onTap: isFirst
+              ? () {
+                  int? nums = int.tryParse(_passengersTextController.text);
+                  if (nums != null && nums <= 8) {
+                    if (((val == 1 && returnDate != "Return") || (val == 2)) &&
+                        departure != "Departure" &&
+                        toPort != null &&
+                        fromPort != null) {
+                      FocusScope.of(context).unfocus();
+                      setState(() => _showError = false);
+
+                      globalSearchFlightData = SearchFlightModel(
+                        dateFrom: DateTime.parse(departure),
+                        dateTo: returnDate != "Return"
+                            ? DateTime.parse(returnDate)
+                            : null,
+                        locationFrom: LocationCoordsModel(
+                          latitude: fromPort!.latitude,
+                          longitude: fromPort!.longitude,
+                        ),
+                        locationTo: LocationCoordsModel(
+                          latitude: toPort!.latitude,
+                          longitude: toPort!.longitude,
+                        ),
+                        numberOfPassengers: nums,
+                      );
+                      Navigator.pushNamed(context, '/flight/search');
+                    } else {
+                      setState(() {
+                        _showError = true;
+                        _errorMessage = 'Fill in all the fields';
+                      });
+                    }
+                  } else {
+                    setState(() {
+                      _showError = true;
+                      _errorMessage = "Number of passengers can't exceed 8";
+                    });
+                  }
+                }
+              : () {},
         ),
         SizedBox(height: 60),
       ],
     );
   }
 
-  dateTimePicker(bool isDeparture) async {
+  dateTimePicker({bool isDeparture = true, bool isSearch = true}) async {
     final initialDate = isDeparture
         ? DateTime.now()
-        : DateTime.now().add(
-            Duration(days: 1),
-          );
+        : departure != 'Departure'
+            ? DateTime.parse(departure).add(
+                Duration(days: 1),
+              )
+            : DateTime.now().add(
+                Duration(days: 1),
+              );
 
     final date = await showDatePicker(
       context: context,
       firstDate: isDeparture
           ? DateTime.now()
-          : DateTime.now().add(
-              Duration(days: 1),
-            ),
+          : departure != 'Departure'
+              ? DateTime.parse(departure).add(
+                  Duration(days: 1),
+                )
+              : DateTime.now().add(Duration(days: 1)),
       lastDate: isDeparture
           ? DateTime.now().add(Duration(days: 120))
-          : DateTime.now().add(Duration(days: 121)),
+          : departure != 'Departure'
+              ? DateTime.parse(departure).add(Duration(days: 121))
+              : DateTime.now().add(Duration(days: 121)),
       initialDate: initialDate,
     );
     if (date != null) {
-      final initialTime = TimeOfDay.now();
-      final time = await showTimePicker(
-        context: context,
-        initialTime: initialTime,
-      );
+      if (!isSearch) {
+        final initialTime = TimeOfDay.now();
+        final time = await showTimePicker(
+          context: context,
+          initialTime: initialTime,
+        );
 
-      if (time != null) {
+        if (time != null) {
+          isDeparture
+              ? setState(() => departure = date
+                      .add(Duration(hours: time.hour, minutes: time.minute))
+                      .toIso8601String() +
+                  'Z')
+              : setState(() => returnDate = date
+                      .add(Duration(hours: time.hour, minutes: time.minute))
+                      .toIso8601String() +
+                  'Z');
+        }
+      } else {
         isDeparture
-            ? setState(() => departure = date
-                .add(Duration(hours: time.hour, minutes: time.minute))
-                .toString())
-            : setState(() => returnDate = date
-                .add(Duration(hours: time.hour, minutes: time.minute))
-                .toString());
+            ? setState(() => departure = date.toIso8601String() + 'Z')
+            : setState(() => returnDate = date.toIso8601String() + 'Z');
       }
     }
   }

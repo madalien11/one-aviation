@@ -57,6 +57,8 @@ Future<String> dateTimePicker(
           ? _result = date.toIso8601String() + 'Z'
           : _result = date.toIso8601String() + 'Z';
     }
+  } else {
+    _result = isDeparture ? 'Departure' : 'Return';
   }
 
   return _result;

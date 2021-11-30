@@ -12,6 +12,7 @@ class FlightInfoTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.onTap,
     this.changed = false,
+    this.validator,
   }) : super(key: key);
 
   final String hintText;
@@ -20,6 +21,7 @@ class FlightInfoTextField extends StatelessWidget {
   final TextInputType keyboardType;
   final Function? onTap;
   final bool changed;
+  final MultiValidator? validator;
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +32,9 @@ class FlightInfoTextField extends StatelessWidget {
         readOnly: onTap != null,
         controller: controller,
         keyboardType: keyboardType,
-        validator:
-            MinLengthValidator(0, errorText: "The field cannot be empty"),
+        validator: validator != null
+            ? validator!
+            : MinLengthValidator(0, errorText: "The field cannot be empty"),
         decoration: InputDecoration(
           enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: PlaceholderIconColor),

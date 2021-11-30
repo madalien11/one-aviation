@@ -7,3 +7,8 @@ class SearchFlights extends FlightsEvent {
   SearchFlights({required this.searchFlightData});
   final SearchFlightModel searchFlightData;
 }
+
+class JoinFlight extends FlightsEvent {
+  JoinFlight({required this.passengersData});
+  final JoinFlightModel passengersData;
+}

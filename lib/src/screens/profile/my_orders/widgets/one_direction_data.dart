@@ -20,7 +20,6 @@ class OneDirectionData extends StatelessWidget {
   Widget build(BuildContext context) {
     Duration duration =
         foundFlightModel.arrivalTime.difference(foundFlightModel.departureTime);
-    print(duration);
     return Row(
       children: [
         SizedBox(width: 28),

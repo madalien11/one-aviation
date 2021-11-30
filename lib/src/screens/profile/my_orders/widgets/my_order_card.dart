@@ -6,6 +6,8 @@ import 'package:one_aviation/src/models/search_flight/found_flight_model.dart';
 
 import 'one_direction_data.dart';
 
+late int foundFlightId;
+
 class MyOrderCard extends StatelessWidget {
   const MyOrderCard({
     Key? key,
@@ -20,47 +22,53 @@ class MyOrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 150,
-      width: double.infinity,
-      margin: const EdgeInsets.only(bottom: 20),
-      decoration: BoxDecoration(
-        color: MyOrderCardBackgroundColor,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            spreadRadius: 0,
-            blurRadius: 10,
-            offset: Offset(1, 1),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Expanded(
-            flex: 2,
-            child: OneDirectionData(
-              foundFlightModel: foundFlightModel,
-              fromPortName: fromPortName,
-              toPortName: toPortName,
+    return GestureDetector(
+      onTap: () {
+        foundFlightId = foundFlightModel.id;
+        Navigator.pushNamed(context, '/flight/passengers');
+      },
+      child: Container(
+        height: 150,
+        width: double.infinity,
+        margin: const EdgeInsets.only(bottom: 20),
+        decoration: BoxDecoration(
+          color: MyOrderCardBackgroundColor,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              spreadRadius: 0,
+              blurRadius: 10,
+              offset: Offset(1, 1),
             ),
-          ),
-          Expanded(
-            child: Row(
-              children: [
-                Spacer(),
-                Text(
-                  priceFormatter(foundFlightModel.price),
-                  style: MyTextStyle.googleFontWrapper(
-                    MyTextStyle.MyOrdersCardPriceTextStyle,
+          ],
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              flex: 2,
+              child: OneDirectionData(
+                foundFlightModel: foundFlightModel,
+                fromPortName: fromPortName,
+                toPortName: toPortName,
+              ),
+            ),
+            Expanded(
+              child: Row(
+                children: [
+                  Spacer(),
+                  Text(
+                    priceFormatter(foundFlightModel.price),
+                    style: MyTextStyle.googleFontWrapper(
+                      MyTextStyle.MyOrdersCardPriceTextStyle,
+                    ),
                   ),
-                ),
-                SizedBox(width: 28),
-              ],
+                  SizedBox(width: 28),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

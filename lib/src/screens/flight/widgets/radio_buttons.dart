@@ -7,10 +7,14 @@ class RadioButtons extends StatefulWidget {
     Key? key,
     required this.val,
     required this.onChanged,
+    this.firstOption = 'Round Trip',
+    this.secondOption = 'One-Way',
   }) : super(key: key);
 
   final int val;
   final Function onChanged;
+  final String firstOption;
+  final String secondOption;
 
   @override
   _RadioButtonsState createState() => _RadioButtonsState();
@@ -41,7 +45,7 @@ class _RadioButtonsState extends State<RadioButtons> {
                   widget.onChanged(1);
                 },
                 child: Text(
-                  "Round Trip",
+                  widget.firstOption,
                   style: MyTextStyle.googleFontWrapper(
                     MyTextStyle.RadioButtonTextStyle,
                   ),
@@ -64,7 +68,7 @@ class _RadioButtonsState extends State<RadioButtons> {
                   widget.onChanged(2);
                 },
                 child: Text(
-                  "One-Way",
+                  widget.secondOption,
                   style: MyTextStyle.googleFontWrapper(
                     MyTextStyle.RadioButtonTextStyle,
                   ),

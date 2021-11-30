@@ -159,4 +159,10 @@ class MyTextStyle {
     color: PrimaryPinkColor,
     fontWeight: FontWeight.w400,
   );
+
+  static const TextStyle AlertDialogTextStyle = TextStyle(
+    fontSize: 20,
+    color: BlackTitleTextColor,
+    fontWeight: FontWeight.w500,
+  );
 }

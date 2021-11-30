@@ -25,8 +25,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         );
         if (res['successful']) {
           var box = Hive.box('tokens');
-          await box.put('access', res['access_token']);
-          await box.put('refresh', res['refresh_token']);
+          await box.put('access', res['message']['access_token']);
+          await box.put('refresh', res['message']['refresh_token']);
           yield LoginSuccessful();
         } else {
           yield LoginUnsuccessful(errorMessage: res['message']);

@@ -10,8 +10,6 @@ import 'package:one_aviation/src/constants/text_styles.dart';
 import 'package:one_aviation/src/screens/auth/bloc/auth_bloc.dart';
 import 'package:one_aviation/src/screens/auth/login_screen.dart';
 
-import 'my_orders/my_orders_screen.dart';
-
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
@@ -83,10 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ProfileButton(
                 title: 'Orders',
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MyOrdersScreen()),
-                  );
+                  Navigator.pushNamed(context, '/profile/my_orders');
                 },
                 icon: Icons.airplane_ticket,
               ),

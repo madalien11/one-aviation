@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:one_aviation/src/common/dio/my_dio.dart';
+import 'package:one_aviation/src/models/join_flight/join_flight_model.dart';
 import 'package:one_aviation/src/models/search_flight/found_flight_model.dart';
 import 'package:one_aviation/src/models/search_flight/search_flight_model.dart';
 
@@ -7,6 +8,8 @@ abstract class FlightServices {
   Future<Map<List<FoundFlightModel>?, String>?> searchFlights(
     SearchFlightModel searchDetails,
   );
+
+  Future<Map<String, dynamic>> joinFlight(JoinFlightModel passengersData);
 }
 
 class FlightImplServices implements FlightServices {
@@ -36,6 +39,24 @@ class FlightImplServices implements FlightServices {
       // Handle error
       print(e.message);
       return {null: e.message};
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> joinFlight(
+      JoinFlightModel passengersData) async {
+    try {
+      var response = await dio.post(
+        'order/join',
+        data: passengersData.toJson(),
+      );
+      return {'message': response.data, 'successful': true};
+    } on DioError catch (e) {
+      // Handle error
+      return {
+        'message': e.response!.data['error'].toString(),
+        'successful': false
+      };
     }
   }
 }

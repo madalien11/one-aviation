@@ -16,3 +16,12 @@ class SearchFlightsUnsuccessful extends FlightsState {
   SearchFlightsUnsuccessful({required this.errorMessage});
   final String errorMessage;
 }
+
+class JoinFlightLoading extends FlightsState {}
+
+class JoinFlightSuccessful extends FlightsState {}
+
+class JoinFlightUnsuccessful extends FlightsState {
+  JoinFlightUnsuccessful({required this.errorMessage});
+  final String errorMessage;
+}

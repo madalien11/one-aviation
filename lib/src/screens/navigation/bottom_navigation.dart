@@ -10,12 +10,14 @@ import 'package:one_aviation/src/screens/auth/new_password_screen.dart';
 import 'package:one_aviation/src/screens/auth/otp_screen.dart';
 import 'package:one_aviation/src/screens/auth/registration_screen.dart';
 import 'package:one_aviation/src/screens/auth/reset_password_screen.dart';
+import 'package:one_aviation/src/screens/flight/add_passengers/add_passengers_screen.dart';
 import 'package:one_aviation/src/screens/flight/bloc/flights_bloc.dart';
 import 'package:one_aviation/src/screens/flight/flight_screen.dart';
 import 'package:one_aviation/src/screens/flight/found_flights/found_flights_screen.dart';
 import 'package:one_aviation/src/screens/home/home_screen.dart';
 import 'package:one_aviation/src/screens/map/bloc/location_bloc.dart';
 import 'package:one_aviation/src/screens/map/map_screen.dart';
+import 'package:one_aviation/src/screens/profile/my_orders/my_orders_screen.dart';
 import 'package:one_aviation/src/screens/profile/profile_screen.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
@@ -83,6 +85,10 @@ class BottomNavigation extends StatelessWidget {
                     create: (context) => FlightsBloc(flightServices: getIt()),
                     child: FoundFlightsScreen(),
                   ),
+              '/flight/passengers': (context) => BlocProvider(
+                    create: (context) => FlightsBloc(flightServices: getIt()),
+                    child: AddPassengersScreen(),
+                  ),
             },
           ),
         ),
@@ -112,6 +118,7 @@ class BottomNavigation extends StatelessWidget {
                     create: (context) => AuthBloc(authServices: getIt()),
                     child: NewPasswordScreen(),
                   ),
+              '/profile/my_orders': (context) => MyOrdersScreen(),
             },
           ),
         ),

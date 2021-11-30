@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:one_aviation/src/models/join_flight/join_flight_model.dart';
 import 'package:one_aviation/src/models/search_flight/found_flight_model.dart';
 import 'package:one_aviation/src/models/search_flight/search_flight_model.dart';
 import 'package:one_aviation/src/services/flight_services.dart';
@@ -27,6 +28,14 @@ class FlightsBloc extends Bloc<FlightsEvent, FlightsState> {
           errorMessage:
               res == null ? 'Flights were not found' : res.values.first,
         );
+      }
+    } else if (event is JoinFlight) {
+      yield JoinFlightLoading();
+      var res = await flightServices.joinFlight(event.passengersData);
+      if (res['successful']) {
+        yield JoinFlightSuccessful();
+      } else {
+        yield JoinFlightUnsuccessful(errorMessage: res['message']);
       }
     }
   }

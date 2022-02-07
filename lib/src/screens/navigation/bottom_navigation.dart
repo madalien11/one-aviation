@@ -17,6 +17,7 @@ import 'package:one_aviation/src/screens/flight/found_flights/found_flights_scre
 import 'package:one_aviation/src/screens/home/home_screen.dart';
 import 'package:one_aviation/src/screens/map/bloc/location_bloc.dart';
 import 'package:one_aviation/src/screens/map/map_screen.dart';
+import 'package:one_aviation/src/screens/profile/bloc/profile_bloc.dart';
 import 'package:one_aviation/src/screens/profile/my_orders/my_orders_screen.dart';
 import 'package:one_aviation/src/screens/profile/profile_screen.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -44,7 +45,10 @@ class BottomNavigation extends StatelessWidget {
                 create: (context) => AuthBloc(authServices: getIt()),
                 child: LoginScreen(),
               )
-            : ProfileScreen(),
+            : BlocProvider(
+                create: (context) => ProfileBloc(profileService: getIt()),
+                child: ProfileScreen(),
+              )
       ];
     }
 

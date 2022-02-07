@@ -7,8 +7,11 @@ import 'package:one_aviation/src/common/dependencies/injection_container.dart';
 import 'package:one_aviation/src/constants/colors.dart';
 import 'package:one_aviation/src/constants/spacing.dart';
 import 'package:one_aviation/src/constants/text_styles.dart';
+import 'package:one_aviation/src/models/profile/profile_model.dart';
 import 'package:one_aviation/src/screens/auth/bloc/auth_bloc.dart';
 import 'package:one_aviation/src/screens/auth/login_screen.dart';
+
+import 'bloc/profile_bloc.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -18,110 +21,147 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  bool _isPressed = false;
+  bool _isLoading = false;
+  bool _showError = false;
+  String _errorMessage = '';
+  ProfileModel? _profileModel;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<ProfileBloc>().add(GetMyProfile());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Padding(
           padding: paddingHorizontal24,
-          child: Column(
-            children: [
-              SizedBox(height: 30),
-              Center(
-                child: SizedBox(
-                  height: 64 * 1.5,
-                  width: 64 * 1.5,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
-                    child: CachedNetworkImage(
-                      imageUrl: 'https://picsum.photos/200/300',
-                      placeholder: (context, url) =>
-                          CupertinoActivityIndicator(),
-                      errorWidget: (context, url, error) => Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: PlaceholderIconColor,
-                        ),
-                        child: Center(
-                          child: Text(
-                            'M',
-                            style: MyTextStyle.googleFontWrapper(
-                              MyTextStyle.ProfilePlaceholderTextStyle,
+          child: BlocListener<ProfileBloc, ProfileState>(
+            listener: (context, state) async {
+              if (state is ProfileLoading) {
+                setState(() => _isLoading = true);
+              } else {
+                setState(() => _isLoading = false);
+              }
+
+              if (state is ProfileSuccessful) {
+                setState(() {
+                  _showError = false;
+                  _profileModel = state.profileModel;
+                });
+              } else if (state is ProfileUnsuccessful) {
+                setState(() {
+                  _showError = true;
+                  _errorMessage = state.errorMessage;
+                });
+              }
+            },
+            child: Column(
+              children: [
+                SizedBox(height: 30),
+                Center(
+                  child: SizedBox(
+                    height: 64 * 1.5,
+                    width: 64 * 1.5,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: CachedNetworkImage(
+                        imageUrl: 'https://picsum.photos/200/300',
+                        placeholder: (context, url) =>
+                            CupertinoActivityIndicator(),
+                        errorWidget: (context, url, error) => Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: PlaceholderIconColor,
+                          ),
+                          child: Center(
+                            child: Text(
+                              'M',
+                              style: MyTextStyle.googleFontWrapper(
+                                MyTextStyle.ProfilePlaceholderTextStyle,
+                              ),
                             ),
                           ),
                         ),
+                        fit: BoxFit.cover,
                       ),
-                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
-              ),
-              SizedBox(height: 18),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal:
-                      (MediaQuery.of(context).size.width - 250) / 2 - 24,
-                ),
-                child: Text(
-                  'Jaden Smith Junior Dos Santos',
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                  style: MyTextStyle.googleFontWrapper(
-                    MyTextStyle.TitleTextStyle,
+                SizedBox(height: 18),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal:
+                        (MediaQuery.of(context).size.width - 250) / 2 - 24,
+                  ),
+                  child: Text(
+                    _profileModel != null
+                        ? _profileModel!.firstName +
+                            ' ' +
+                            _profileModel!.lastName
+                        : '',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: MyTextStyle.googleFontWrapper(
+                      MyTextStyle.TitleTextStyle,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: 18),
-              Divider(
-                color: DividerColor,
-                thickness: 3,
-              ),
-              SizedBox(height: 30),
-              ProfileButton(
-                title: 'Orders',
-                onTap: () {
-                  Navigator.pushNamed(context, '/profile/my_orders');
-                },
-                icon: Icons.airplane_ticket,
-              ),
-              ProfileButton(
-                title: 'Notifications',
-                onTap: () {
-                  print('Profile tab');
-                },
-                icon: Icons.notifications,
-              ),
-              ProfileButton(
-                title: 'Settings',
-                onTap: () {
-                  print('Profile tab');
-                },
-                icon: Icons.settings,
-              ),
-              Divider(
-                color: DividerColor,
-                thickness: 3,
-              ),
-              SizedBox(height: 30),
-              ProfileButton(
-                title: 'Log out',
-                onTap: () async {
-                  var box = Hive.box('tokens');
-                  await box.delete('access');
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BlocProvider(
-                        create: (context) => AuthBloc(authServices: getIt()),
-                        child: LoginScreen(),
+                SizedBox(height: 18),
+                Divider(
+                  color: DividerColor,
+                  thickness: 3,
+                ),
+                SizedBox(height: 30),
+                ProfileButton(
+                  title: 'Orders',
+                  onTap: () {
+                    Navigator.pushNamed(context, '/profile/my_orders');
+                  },
+                  icon: Icons.airplane_ticket,
+                ),
+                ProfileButton(
+                  title: 'Notifications',
+                  onTap: () {
+                    print('Profile tab');
+                  },
+                  icon: Icons.notifications,
+                ),
+                ProfileButton(
+                  title: 'Settings',
+                  onTap: () {
+                    print('Profile tab');
+                  },
+                  icon: Icons.settings,
+                ),
+                Divider(
+                  color: DividerColor,
+                  thickness: 3,
+                ),
+                SizedBox(height: 30),
+                ProfileButton(
+                  title: 'Log out',
+                  onTap: () async {
+                    var box = Hive.box('tokens');
+                    await box.delete('access');
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BlocProvider(
+                          create: (context) => AuthBloc(authServices: getIt()),
+                          child: LoginScreen(),
+                        ),
                       ),
-                    ),
-                  );
-                },
-                icon: Icons.logout,
-              ),
-            ],
+                    );
+                  },
+                  icon: Icons.logout,
+                ),
+              ],
+            ),
           ),
         ),
       ),

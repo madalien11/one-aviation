@@ -3,6 +3,7 @@ import 'package:one_aviation/src/common/dio/my_dio.dart';
 import 'package:one_aviation/src/services/auth_services.dart';
 import 'package:one_aviation/src/services/flight_services.dart';
 import 'package:one_aviation/src/services/location_services.dart';
+import 'package:one_aviation/src/services/profile_services.dart';
 
 GetIt getIt = GetIt.instance;
 
@@ -17,4 +18,7 @@ void initGetIt() {
 
   getIt.registerSingleton<FlightServices>(
       FlightImplServices(myDio: getIt<MyDio>()));
+
+  getIt.registerSingleton<ProfileService>(
+      ProfileImplService(myDio: getIt<MyDio>()));
 }

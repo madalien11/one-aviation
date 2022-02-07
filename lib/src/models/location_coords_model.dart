@@ -7,10 +7,12 @@ class LocationCoordsModel {
   LocationCoordsModel({
     required this.latitude,
     required this.longitude,
+    required this.name,
   });
 
   final double latitude;
   final double longitude;
+  final String name;
 
   factory LocationCoordsModel.fromJson(Map<String, dynamic> json) =>
       _$LocationCoordsModelFromJson(json);

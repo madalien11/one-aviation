@@ -12,20 +12,21 @@ class MyOrderCard extends StatelessWidget {
   const MyOrderCard({
     Key? key,
     required this.foundFlightModel,
-    required this.fromPortName,
-    required this.toPortName,
+    this.isFromHomeScreen = false,
   }) : super(key: key);
 
   final FoundFlightModel foundFlightModel;
-  final String fromPortName;
-  final String toPortName;
+  final bool isFromHomeScreen;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         foundFlightId = foundFlightModel.id;
-        Navigator.pushNamed(context, '/flight/passengers');
+        Navigator.pushNamed(
+          context,
+          isFromHomeScreen ? '/home/passengers' : '/flight/passengers',
+        );
       },
       child: Container(
         height: 150,
@@ -47,11 +48,7 @@ class MyOrderCard extends StatelessWidget {
           children: [
             Expanded(
               flex: 2,
-              child: OneDirectionData(
-                foundFlightModel: foundFlightModel,
-                fromPortName: fromPortName,
-                toPortName: toPortName,
-              ),
+              child: OneDirectionData(foundFlightModel: foundFlightModel),
             ),
             Expanded(
               child: Row(

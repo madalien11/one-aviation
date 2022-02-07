@@ -54,15 +54,15 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                   from: LocationCoordsModel(
                     latitude: 44.093484,
                     longitude: 11.495894,
+                    name: 'From',
                   ),
                   to: LocationCoordsModel(
                     latitude: 42.395839,
                     longitude: 12.093458,
+                    name: 'To',
                   ),
                   status: 'Active',
                 ),
-                fromPortName: 'FLR',
-                toPortName: 'CDG',
               );
             },
             itemCount: 5,

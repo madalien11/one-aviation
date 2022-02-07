@@ -76,8 +76,6 @@ class _FoundFlightsScreenState extends State<FoundFlightsScreen> {
                         children: [
                           FoundFlightsScreenImage(
                             searchFlightData: globalSearchFlightData!,
-                            fromPortName: fromPortName,
-                            toPortName: toPortName,
                           ),
                           Padding(
                             padding: paddingHorizontal21,
@@ -95,8 +93,6 @@ class _FoundFlightsScreenState extends State<FoundFlightsScreen> {
                                           ? SizedBox(height: 40)
                                           : MyOrderCard(
                                               foundFlightModel: foundFlights[i],
-                                              fromPortName: fromPortName,
-                                              toPortName: toPortName,
                                             ),
                                 ),
                               ],

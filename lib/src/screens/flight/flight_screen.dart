@@ -17,8 +17,6 @@ import 'widgets/options_buttons.dart';
 import 'widgets/radio_buttons.dart';
 
 SearchFlightModel? globalSearchFlightData;
-String fromPortName = "From";
-String toPortName = "To";
 
 class FlightScreen extends StatefulWidget {
   @override
@@ -37,6 +35,8 @@ class _FlightScreenState extends State<FlightScreen> {
 
   PortLocaitonModel? fromPort;
   PortLocaitonModel? toPort;
+  String fromPortName = "From";
+  String toPortName = "To";
 
   String departure = "Departure";
   String returnDate = "Return";
@@ -259,10 +259,12 @@ class _FlightScreenState extends State<FlightScreen> {
                         locationFrom: LocationCoordsModel(
                           latitude: fromPort!.latitude,
                           longitude: fromPort!.longitude,
+                          name: fromPortName,
                         ),
                         locationTo: LocationCoordsModel(
                           latitude: toPort!.latitude,
                           longitude: toPort!.longitude,
+                          name: toPortName,
                         ),
                         numberOfPassengers: nums,
                       );

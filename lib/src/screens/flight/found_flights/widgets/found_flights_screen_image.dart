@@ -11,13 +11,9 @@ class FoundFlightsScreenImage extends StatelessWidget {
   const FoundFlightsScreenImage({
     Key? key,
     required this.searchFlightData,
-    required this.fromPortName,
-    required this.toPortName,
   }) : super(key: key);
 
   final SearchFlightModel searchFlightData;
-  final String fromPortName;
-  final String toPortName;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +51,7 @@ class FoundFlightsScreenImage extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    fromPortName,
+                    searchFlightData.locationFrom.name,
                     style: MyTextStyle.googleFontWrapper(
                       MyTextStyle.SeaplanesSubtitleTextStyle.copyWith(
                         fontSize: 25,
@@ -87,7 +83,7 @@ class FoundFlightsScreenImage extends StatelessWidget {
                   ),
                   SizedBox(width: 22),
                   Text(
-                    toPortName,
+                    searchFlightData.locationTo.name,
                     style: MyTextStyle.googleFontWrapper(
                       MyTextStyle.SeaplanesSubtitleTextStyle.copyWith(
                         fontSize: 25,

@@ -6,7 +6,7 @@ import 'package:one_aviation/src/models/search_flight/search_flight_model.dart';
 
 abstract class FlightServices {
   Future<Map<List<FoundFlightModel>?, String>?> searchFlights(
-    SearchFlightModel searchDetails,
+    SearchFlightModel? searchDetails,
   );
 
   Future<Map<String, dynamic>> joinFlight(JoinFlightModel passengersData);
@@ -21,19 +21,24 @@ class FlightImplServices implements FlightServices {
 
   @override
   Future<Map<List<FoundFlightModel>?, String>?> searchFlights(
-    SearchFlightModel searchDetails,
+    SearchFlightModel? searchDetails,
   ) async {
     try {
-      var response = await dio.post(
-        'order/sharing',
-        data: searchDetails.toJson(),
-      );
+      var response = searchDetails != null
+          ? await dio.post(
+              'order/sharing',
+              data: searchDetails.toJson(),
+            )
+          : await dio.post('order/sharing');
       if (response.data != null) {
-        var responseList = response.data!['flights'] as List;
-
-        var result =
-            responseList.map((e) => FoundFlightModel.fromJson(e)).toList();
-        return {result: ''};
+        var responseList = response.data!['flights'] as List?;
+        if (responseList != null) {
+          var result =
+              responseList.map((e) => FoundFlightModel.fromJson(e)).toList();
+          return {result: ''};
+        } else {
+          return {null: 'No flights were found'};
+        }
       }
     } on DioError catch (e) {
       // Handle error

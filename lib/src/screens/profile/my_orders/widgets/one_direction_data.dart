@@ -8,13 +8,9 @@ class OneDirectionData extends StatelessWidget {
   const OneDirectionData({
     Key? key,
     required this.foundFlightModel,
-    required this.fromPortName,
-    required this.toPortName,
   }) : super(key: key);
 
   final FoundFlightModel foundFlightModel;
-  final String fromPortName;
-  final String toPortName;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +31,7 @@ class OneDirectionData extends StatelessWidget {
             ),
             SizedBox(height: 4),
             Text(
-              fromPortName,
+              foundFlightModel.from.name.toString(),
               style: MyTextStyle.googleFontWrapper(
                 MyTextStyle.MyOrdersCardCodeTextStyle,
               ),
@@ -90,7 +86,7 @@ class OneDirectionData extends StatelessWidget {
             ),
             SizedBox(height: 4),
             Text(
-              toPortName,
+              foundFlightModel.to.name.toString(),
               style: MyTextStyle.googleFontWrapper(
                 MyTextStyle.MyOrdersCardCodeTextStyle,
               ),

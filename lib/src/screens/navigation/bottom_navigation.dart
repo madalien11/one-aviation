@@ -31,7 +31,10 @@ class BottomNavigation extends StatelessWidget {
     _controller = PersistentTabController(initialIndex: 0);
     List<Widget> _buildScreens() {
       return [
-        HomeScreen(),
+        BlocProvider(
+          create: (context) => FlightsBloc(flightServices: getIt()),
+          child: HomeScreen(),
+        ),
         BlocProvider(
           create: (context) => FlightsBloc(flightServices: getIt()),
           child: FlightScreen(),
@@ -54,6 +57,15 @@ class BottomNavigation extends StatelessWidget {
           ),
           activeColorPrimary: PrimaryDarkTextColor,
           inactiveColorPrimary: PlaceholderIconColor,
+          routeAndNavigatorSettings: RouteAndNavigatorSettings(
+            initialRoute: '/home',
+            routes: {
+              '/home/passengers': (context) => BlocProvider(
+                    create: (context) => FlightsBloc(flightServices: getIt()),
+                    child: AddPassengersScreen(),
+                  ),
+            },
+          ),
         ),
         PersistentBottomNavBarItem(
           icon: RotationTransition(

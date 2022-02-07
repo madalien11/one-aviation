@@ -4,8 +4,8 @@ part of 'flights_bloc.dart';
 abstract class FlightsEvent {}
 
 class SearchFlights extends FlightsEvent {
-  SearchFlights({required this.searchFlightData});
-  final SearchFlightModel searchFlightData;
+  SearchFlights({this.searchFlightData});
+  final SearchFlightModel? searchFlightData;
 }
 
 class JoinFlight extends FlightsEvent {

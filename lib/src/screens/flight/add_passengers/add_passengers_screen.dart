@@ -27,7 +27,7 @@ class _AddPassengersScreenState extends State<AddPassengersScreen> {
   List<PassengerDataTextField> _passengerDataTextFields = [];
   List<PassengerModel> _passengers = [];
 
-  bool _isLoading = true;
+  bool _isLoading = false;
   bool _showError = false;
   String _errorMessage = 'Fill in all the fields';
 
@@ -115,7 +115,7 @@ class _AddPassengersScreenState extends State<AddPassengersScreen> {
             ),
             email: _passengers[0].email,
             orderId: foundFlightId,
-            passengers: _passengers.sublist(1),
+            passengers: _passengers.length == 1 ? [] : _passengers.sublist(1),
             phoneNumber: _passengers[0].phoneNumber,
           );
           print(joinFlightModel.toJson());

@@ -24,6 +24,14 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       } else {
         yield ProfileUnsuccessful(errorMessage: res['message']);
       }
+    } else if (event is GetDocumentTypes) {
+      yield DocumentTypesLoading();
+      var res = await profileService.getDocumentTypes();
+      if (res['successful']) {
+        yield DocumentTypesSuccessful(documentTypes: res['message']);
+      } else {
+        yield DocumentTypesUnsuccessful(errorMessage: res['message']);
+      }
     }
   }
 }

@@ -21,7 +21,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  bool _isPressed = false;
   bool _isLoading = false;
   bool _showError = false;
   String _errorMessage = '';
@@ -31,6 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     context.read<ProfileBloc>().add(GetMyProfile());
+    context.read<ProfileBloc>().add(GetDocumentTypes());
   }
 
   @override
@@ -59,109 +59,123 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 });
               }
             },
-            child: Column(
-              children: [
-                SizedBox(height: 30),
-                Center(
-                  child: SizedBox(
-                    height: 64 * 1.5,
-                    width: 64 * 1.5,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: CachedNetworkImage(
-                        imageUrl: 'https://picsum.photos/200/300',
-                        placeholder: (context, url) =>
-                            CupertinoActivityIndicator(),
-                        errorWidget: (context, url, error) => Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: PlaceholderIconColor,
-                          ),
-                          child: Center(
-                            child: Text(
-                              'M',
-                              style: MyTextStyle.googleFontWrapper(
-                                MyTextStyle.ProfilePlaceholderTextStyle,
+            child: _isLoading
+                ? Center(child: CupertinoActivityIndicator())
+                : _showError
+                    ? GestureDetector(
+                        onTap: () {
+                          setState(() => _showError = false);
+                        },
+                        child: Center(child: Text(_errorMessage)))
+                    : Column(
+                        children: [
+                          SizedBox(height: 30),
+                          Center(
+                            child: SizedBox(
+                              height: 64 * 1.5,
+                              width: 64 * 1.5,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: CachedNetworkImage(
+                                  imageUrl: 'https://picsum.photos/200/300',
+                                  placeholder: (context, url) =>
+                                      CupertinoActivityIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(100),
+                                      color: PlaceholderIconColor,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        'M',
+                                        style: MyTextStyle.googleFontWrapper(
+                                          MyTextStyle
+                                              .ProfilePlaceholderTextStyle,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        fit: BoxFit.cover,
+                          SizedBox(height: 18),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal:
+                                  (MediaQuery.of(context).size.width - 250) /
+                                          2 -
+                                      24,
+                            ),
+                            child: Text(
+                              _profileModel != null
+                                  ? _profileModel!.firstName +
+                                      ' ' +
+                                      _profileModel!.lastName
+                                  : '',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
+                              style: MyTextStyle.googleFontWrapper(
+                                MyTextStyle.TitleTextStyle,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 18),
+                          Divider(
+                            color: DividerColor,
+                            thickness: 3,
+                          ),
+                          SizedBox(height: 30),
+                          ProfileButton(
+                            title: 'Orders',
+                            onTap: () {
+                              Navigator.pushNamed(
+                                  context, '/profile/my_orders');
+                            },
+                            icon: Icons.airplane_ticket,
+                          ),
+                          ProfileButton(
+                            title: 'Notifications',
+                            onTap: () {
+                              print('Profile tab');
+                            },
+                            icon: Icons.notifications,
+                          ),
+                          ProfileButton(
+                            title: 'Settings',
+                            onTap: () {
+                              print('Profile tab');
+                            },
+                            icon: Icons.settings,
+                          ),
+                          Divider(
+                            color: DividerColor,
+                            thickness: 3,
+                          ),
+                          SizedBox(height: 30),
+                          ProfileButton(
+                            title: 'Log out',
+                            onTap: () async {
+                              var box = Hive.box('tokens');
+                              await box.delete('access');
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => BlocProvider(
+                                    create: (context) =>
+                                        AuthBloc(authServices: getIt()),
+                                    child: LoginScreen(),
+                                  ),
+                                ),
+                              );
+                            },
+                            icon: Icons.logout,
+                          ),
+                        ],
                       ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 18),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal:
-                        (MediaQuery.of(context).size.width - 250) / 2 - 24,
-                  ),
-                  child: Text(
-                    _profileModel != null
-                        ? _profileModel!.firstName +
-                            ' ' +
-                            _profileModel!.lastName
-                        : '',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                    style: MyTextStyle.googleFontWrapper(
-                      MyTextStyle.TitleTextStyle,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 18),
-                Divider(
-                  color: DividerColor,
-                  thickness: 3,
-                ),
-                SizedBox(height: 30),
-                ProfileButton(
-                  title: 'Orders',
-                  onTap: () {
-                    Navigator.pushNamed(context, '/profile/my_orders');
-                  },
-                  icon: Icons.airplane_ticket,
-                ),
-                ProfileButton(
-                  title: 'Notifications',
-                  onTap: () {
-                    print('Profile tab');
-                  },
-                  icon: Icons.notifications,
-                ),
-                ProfileButton(
-                  title: 'Settings',
-                  onTap: () {
-                    print('Profile tab');
-                  },
-                  icon: Icons.settings,
-                ),
-                Divider(
-                  color: DividerColor,
-                  thickness: 3,
-                ),
-                SizedBox(height: 30),
-                ProfileButton(
-                  title: 'Log out',
-                  onTap: () async {
-                    var box = Hive.box('tokens');
-                    await box.delete('access');
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BlocProvider(
-                          create: (context) => AuthBloc(authServices: getIt()),
-                          child: LoginScreen(),
-                        ),
-                      ),
-                    );
-                  },
-                  icon: Icons.logout,
-                ),
-              ],
-            ),
           ),
         ),
       ),

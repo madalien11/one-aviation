@@ -5,6 +5,8 @@ import 'package:one_aviation/src/models/profile/profile_model.dart';
 
 abstract class ProfileService {
   Future<Map<String, dynamic>> getMyProfile();
+
+  Future<Map<String, dynamic>> getDocumentTypes();
 }
 
 class ProfileImplService implements ProfileService {
@@ -24,6 +26,21 @@ class ProfileImplService implements ProfileService {
         'message': ProfileModel.fromJson(response.data),
         'successful': true
       };
+    } on DioError catch (e) {
+      // Handle error
+      return {
+        'message': e.response!.data['error'].toString(),
+        'successful': false
+      };
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> getDocumentTypes() async {
+    try {
+      var response = await dio.get('document-types');
+      List<String> _res = (response.data as List<dynamic>).cast<String>();
+      return {'message': _res, 'successful': true};
     } on DioError catch (e) {
       // Handle error
       return {

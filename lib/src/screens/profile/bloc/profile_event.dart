@@ -4,3 +4,5 @@ part of 'profile_bloc.dart';
 abstract class ProfileEvent {}
 
 class GetMyProfile extends ProfileEvent {}
+
+class GetDocumentTypes extends ProfileEvent {}

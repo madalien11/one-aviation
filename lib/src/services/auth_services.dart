@@ -17,13 +17,17 @@ abstract class AuthorizationService {
     required String password,
   });
 
-  Future<Map<String, dynamic>> verifyEmail({
+  Future<Map<String, dynamic>> resetPasswordVerify({
     required String email,
   });
 
   Future<Map<String, dynamic>> resetPassword({
     required String email,
     required String password,
+  });
+
+  Future<Map<String, dynamic>> verifyEmail({
+    required String email,
   });
 }
 
@@ -83,7 +87,7 @@ class AuthorizationImplService implements AuthorizationService {
   }
 
   @override
-  Future<Map<String, dynamic>> verifyEmail({
+  Future<Map<String, dynamic>> resetPasswordVerify({
     required String email,
   }) async {
     try {
@@ -117,6 +121,26 @@ class AuthorizationImplService implements AuthorizationService {
         'email': email,
         'password': password,
       });
+      return {'message': response.data, 'successful': true};
+    } on DioError catch (e) {
+      // Handle error
+      return {
+        'message': e.response!.data['error'].toString(),
+        'successful': false
+      };
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> verifyEmail({
+    required String email,
+  }) async {
+    try {
+      var response = await dio.put(
+        'verify/email',
+        queryParameters: {'email': email},
+      );
+
       return {'message': response.data, 'successful': true};
     } on DioError catch (e) {
       // Handle error

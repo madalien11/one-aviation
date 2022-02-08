@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:one_aviation/src/common/dio/my_dio.dart';
 import 'package:one_aviation/src/models/join_flight/join_flight_model.dart';
 import 'package:one_aviation/src/models/search_flight/found_flight_model.dart';
@@ -10,6 +11,8 @@ abstract class FlightServices {
   );
 
   Future<Map<String, dynamic>> joinFlight(JoinFlightModel passengersData);
+
+  Future<Map<String, dynamic>> getMyHistory();
 }
 
 class FlightImplServices implements FlightServices {
@@ -58,6 +61,23 @@ class FlightImplServices implements FlightServices {
       return {'message': response.data, 'successful': true};
     } on DioError catch (e) {
       // Handle error
+      return {
+        'message': e.response!.data['error'].toString(),
+        'successful': false
+      };
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> getMyHistory() async {
+    try {
+      var box = Hive.box('tokens');
+      dio.options.headers['Authorization'] = 'Bearer ${box.get('access')}';
+      var response = await dio.get('order/history');
+      return {'message': response, 'successful': true};
+    } on DioError catch (e) {
+      // Handle error
+      print(e);
       return {
         'message': e.response!.data['error'].toString(),
         'successful': false

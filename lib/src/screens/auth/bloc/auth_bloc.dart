@@ -58,7 +58,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } else if (event is VerifyEmail) {
       yield VerifyEmailLoading();
       if (event.email.trim().isNotEmpty) {
-        var res = await authServices.verifyEmail(
+        var res = await authServices.resetPasswordVerify(
           email: event.email.trim(),
         );
         if (res['successful']) {

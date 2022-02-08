@@ -25,3 +25,15 @@ class JoinFlightUnsuccessful extends FlightsState {
   JoinFlightUnsuccessful({required this.errorMessage});
   final String errorMessage;
 }
+
+class MyHistoryLoading extends FlightsState {}
+
+class MyHistorySuccessful extends FlightsState {
+  MyHistorySuccessful({required this.myHistory});
+  final dynamic myHistory;
+}
+
+class MyHistoryUnsuccessful extends FlightsState {
+  MyHistoryUnsuccessful({required this.errorMessage});
+  final String errorMessage;
+}

@@ -37,6 +37,17 @@ class FlightsBloc extends Bloc<FlightsEvent, FlightsState> {
       } else {
         yield JoinFlightUnsuccessful(errorMessage: res['message']);
       }
+    } else if (event is GetMyHistory) {
+      yield MyHistoryLoading();
+      var res = await flightServices.getMyHistory();
+      print('here');
+      print(res);
+      print('here');
+      if (res['successful']) {
+        yield MyHistorySuccessful(myHistory: res['message']);
+      } else {
+        yield MyHistoryUnsuccessful(errorMessage: res['message']);
+      }
     }
   }
 }

@@ -25,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<FlightsBloc>().add(GetMyHistory());
     context.read<FlightsBloc>().add(SearchFlights());
   }
 

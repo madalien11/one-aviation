@@ -14,3 +14,8 @@ class JoinFlight extends FlightsEvent {
 }
 
 class GetMyHistory extends FlightsEvent {}
+
+class CreateFlight extends FlightsEvent {
+  CreateFlight({required this.flightData});
+  final CreateFlightModel flightData;
+}

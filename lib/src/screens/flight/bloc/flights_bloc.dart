@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:one_aviation/src/models/create_flight/create_flight_model.dart';
 import 'package:one_aviation/src/models/join_flight/join_flight_model.dart';
 import 'package:one_aviation/src/models/search_flight/found_flight_model.dart';
 import 'package:one_aviation/src/models/search_flight/search_flight_model.dart';
@@ -40,13 +41,18 @@ class FlightsBloc extends Bloc<FlightsEvent, FlightsState> {
     } else if (event is GetMyHistory) {
       yield MyHistoryLoading();
       var res = await flightServices.getMyHistory();
-      print('here');
-      print(res);
-      print('here');
       if (res['successful']) {
         yield MyHistorySuccessful(myHistory: res['message']);
       } else {
         yield MyHistoryUnsuccessful(errorMessage: res['message']);
+      }
+    } else if (event is CreateFlight) {
+      yield CreateFlightLoading();
+      var res = await flightServices.createFlight(event.flightData);
+      if (res['successful']) {
+        yield CreateFlightSuccessful();
+      } else {
+        yield CreateFlightUnsuccessful(errorMessage: res['message']);
       }
     }
   }

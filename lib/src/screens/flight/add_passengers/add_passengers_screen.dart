@@ -13,6 +13,7 @@ import 'package:one_aviation/src/models/passenger/passenger_model.dart';
 import 'package:one_aviation/src/screens/flight/bloc/flights_bloc.dart';
 import 'package:one_aviation/src/screens/flight/flight_screen.dart';
 import 'package:one_aviation/src/screens/flight/widgets/flight_screen_image.dart';
+import 'package:one_aviation/src/screens/profile/bloc/profile_bloc.dart';
 import 'package:one_aviation/src/screens/profile/my_orders/widgets/my_order_card.dart';
 
 List<int> documents = [1];
@@ -34,8 +35,13 @@ class _AddPassengersScreenState extends State<AddPassengersScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<ProfileBloc>().add(GetMyProfile());
     documents.clear();
     documents.add(1);
+    passengerNum = 2;
+    _passengerDataTextFields.clear();
+    _passengers.clear();
+
     _passengerDataTextFields.add(
       PassengerDataTextField(
         number: 1,
@@ -77,7 +83,7 @@ class _AddPassengersScreenState extends State<AddPassengersScreen> {
   @override
   Widget build(BuildContext context) {
     var pinkRoundedButton = PinkRoundedButton(
-      title: 'Book Now',
+      title: globalCreateFlightData != null ? 'Create a Flight' : 'Book Now',
       onTap: () {
         _passengers.clear();
         for (int i = 0; i < _passengerDataTextFields.length; i++) {
@@ -107,22 +113,45 @@ class _AddPassengersScreenState extends State<AddPassengersScreen> {
           }
         }
         if (_showError == false) {
-          var joinFlightModel = JoinFlightModel(
-            document: DocumentModel(
-              number: _passengers[0].document.number,
-              type: _passengers[0].document.type,
-              // type: documents[widget.number],
-            ),
-            email: _passengers[0].email,
-            orderId: foundFlightId,
-            passengers: _passengers.length == 1 ? [] : _passengers.sublist(1),
-            phoneNumber: _passengers[0].phoneNumber,
-          );
-          print(joinFlightModel.toJson());
-          context.read<FlightsBloc>().add(
-                JoinFlight(passengersData: joinFlightModel),
+          if (globalCreateFlightData != null) {
+            if (_passengerDataTextFields[0].documentTextController.text != '') {
+              globalCreateFlightData!.setDocument(
+                DocumentModel(
+                  number:
+                      _passengerDataTextFields[0].documentTextController.text,
+                  type: documents[0] == 1 ? 'passport' : 'national ID',
+                ),
               );
-          // Navigator.pushNamed(context, '/flight/search');
+              globalCreateFlightData!.passengers = _passengers;
+              print(globalCreateFlightData!.toJson());
+              context.read<FlightsBloc>().add(
+                    CreateFlight(flightData: globalCreateFlightData!),
+                  );
+              setState(() => _showError = false);
+            } else {
+              setState(() {
+                _showError = true;
+                _errorMessage = 'Please, enter your document data';
+              });
+            }
+          } else {
+            var joinFlightModel = JoinFlightModel(
+              document: DocumentModel(
+                number: _passengers[0].document.number,
+                type: _passengers[0].document.type,
+                // type: documents[widget.number],
+              ),
+              email: _passengers[0].email,
+              orderId: foundFlightId,
+              passengers: _passengers.length == 1 ? [] : _passengers.sublist(1),
+              phoneNumber: _passengers[0].phoneNumber,
+            );
+            print(joinFlightModel.toJson());
+            context.read<FlightsBloc>().add(
+                  JoinFlight(passengersData: joinFlightModel),
+                );
+            // Navigator.pushNamed(context, '/flight/search');
+          }
         }
       },
     );
@@ -132,44 +161,130 @@ class _AddPassengersScreenState extends State<AddPassengersScreen> {
         onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: BlocListener<FlightsBloc, FlightsState>(
-          listener: (context, state) {
-            if (state is JoinFlightLoading) {
-              setState(() => _isLoading = true);
-            } else {
-              setState(() => _isLoading = false);
-            }
+        child: MultiBlocListener(
+          listeners: [
+            BlocListener<FlightsBloc, FlightsState>(
+              listener: (context, state) {
+                if (state is JoinFlightLoading) {
+                  setState(() => _isLoading = true);
+                } else {
+                  setState(() => _isLoading = false);
+                }
 
-            if (state is JoinFlightSuccessful) {
-              setState(() => _showError = false);
-              showDialog(
-                  context: context,
-                  builder: (_) {
-                    // Future.delayed(Duration(milliseconds: 600), () {
-                    //   Navigator.of(context).maybePop();
-                    // });
-                    return AlertDialog(
-                      title: Text(
-                        'Successfull!\nYou joined a flight.',
-                        textAlign: TextAlign.center,
-                        style: MyTextStyle.googleFontWrapper(
-                          MyTextStyle.AlertDialogTextStyle,
-                        ),
-                      ),
-                      content: Icon(
-                        CupertinoIcons.check_mark_circled_solid,
-                        color: CupertinoColors.activeGreen,
-                        size: 50,
-                      ),
-                    );
-                  }).then((value) => Navigator.of(context).pop());
-            } else if (state is JoinFlightUnsuccessful) {
-              setState(() {
-                _showError = true;
-                _errorMessage = state.errorMessage;
-              });
-            }
-          },
+                if (state is JoinFlightSuccessful) {
+                  setState(() => _showError = false);
+                  showDialog(
+                      context: context,
+                      builder: (_) {
+                        // Future.delayed(Duration(milliseconds: 600), () {
+                        //   Navigator.of(context).maybePop();
+                        // });
+                        return AlertDialog(
+                          title: Text(
+                            'Successfull!\nYou joined a flight.',
+                            textAlign: TextAlign.center,
+                            style: MyTextStyle.googleFontWrapper(
+                              MyTextStyle.AlertDialogTextStyle,
+                            ),
+                          ),
+                          content: Icon(
+                            CupertinoIcons.check_mark_circled_solid,
+                            color: CupertinoColors.activeGreen,
+                            size: 50,
+                          ),
+                        );
+                      }).then((value) => Navigator.of(context).pop());
+                } else if (state is JoinFlightUnsuccessful) {
+                  setState(() {
+                    _showError = true;
+                    _errorMessage = state.errorMessage;
+                  });
+                }
+
+                if (state is CreateFlightLoading) {
+                  setState(() => _isLoading = true);
+                } else {
+                  setState(() => _isLoading = false);
+                }
+
+                if (state is CreateFlightSuccessful) {
+                  setState(() => _showError = false);
+                  showDialog(
+                      context: context,
+                      builder: (_) {
+                        Future.delayed(Duration(milliseconds: 600), () {
+                          Navigator.of(context).maybePop();
+                        });
+                        return AlertDialog(
+                          title: Text(
+                            'Successfull!\nYou created a flight.',
+                            textAlign: TextAlign.center,
+                            style: MyTextStyle.googleFontWrapper(
+                              MyTextStyle.AlertDialogTextStyle,
+                            ),
+                          ),
+                          content: Icon(
+                            CupertinoIcons.check_mark_circled_solid,
+                            color: CupertinoColors.activeGreen,
+                            size: 50,
+                          ),
+                        );
+                      }).then((value) => Navigator.of(context).pop());
+                } else if (state is CreateFlightUnsuccessful) {
+                  setState(() {
+                    _showError = true;
+                    _errorMessage = state.errorMessage;
+                  });
+                }
+              },
+            ),
+            BlocListener<ProfileBloc, ProfileState>(
+              listener: (context, state) {
+                if (state is ProfileLoading) {
+                  setState(() => _isLoading = true);
+                } else {
+                  setState(() => _isLoading = false);
+                }
+
+                if (state is ProfileSuccessful) {
+                  setState(() {
+                    _showError = false;
+                    if (globalCreateFlightData != null) {
+                      _passengerDataTextFields[0].nameTextController.text =
+                          state.profileModel.firstName;
+                      _passengerDataTextFields[0].surnameTextController.text =
+                          state.profileModel.lastName;
+                      _passengerDataTextFields[0].emailTextController.text =
+                          state.profileModel.email;
+                      globalCreateFlightData!
+                          .setEmail(state.profileModel.email);
+                      _passengerDataTextFields[0].phoneTextController.text =
+                          state.profileModel.phoneNumber;
+                      globalCreateFlightData!
+                          .setPhoneNumber(state.profileModel.phoneNumber);
+                      if (state.profileModel.document != null) {
+                        documents[0] =
+                            state.profileModel.document!.type == 'Passport'
+                                ? 1
+                                : 2;
+                        _passengerDataTextFields[0]
+                                .documentTextController
+                                .text =
+                            state.profileModel.document!.number.toString();
+                        globalCreateFlightData!
+                            .setDocument(state.profileModel.document);
+                      }
+                    }
+                  });
+                } else if (state is ProfileUnsuccessful) {
+                  setState(() {
+                    _showError = true;
+                    _errorMessage = state.errorMessage;
+                  });
+                }
+              },
+            ),
+          ],
           child: _isLoading
               ? Center(child: CupertinoActivityIndicator())
               : SafeArea(
@@ -219,7 +334,8 @@ class _AddPassengersScreenState extends State<AddPassengersScreen> {
                                               errorMessage: _errorMessage)
                                           : SizedBox(),
                                       SizedBox(height: 10),
-                                      globalSearchFlightData != null
+                                      globalSearchFlightData != null &&
+                                              globalCreateFlightData == null
                                           ? pinkRoundedButton
                                           : Row(
                                               children: [
@@ -237,7 +353,7 @@ class _AddPassengersScreenState extends State<AddPassengersScreen> {
                                                               number:
                                                                   passengerNum,
                                                               title:
-                                                                  'Passenger $passengerNum',
+                                                                  'Passenger //',
                                                               passengerInfoFormkey:
                                                                   GlobalKey<
                                                                       FormState>(),
@@ -276,7 +392,7 @@ class _AddPassengersScreenState extends State<AddPassengersScreen> {
                                                   child: PinkRoundedButton(
                                                     title: '-1',
                                                     onTap: () {
-                                                      if (passengerNum > 2)
+                                                      if (passengerNum > 1)
                                                         setState(() {
                                                           passengerNum -= 1;
                                                           _passengerDataTextFields

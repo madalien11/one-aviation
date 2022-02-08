@@ -3,6 +3,7 @@ import 'package:one_aviation/src/common/utils/price_formatter.dart';
 import 'package:one_aviation/src/constants/colors.dart';
 import 'package:one_aviation/src/constants/text_styles.dart';
 import 'package:one_aviation/src/models/search_flight/found_flight_model.dart';
+import 'package:one_aviation/src/screens/flight/flight_screen.dart';
 
 import 'one_direction_data.dart';
 
@@ -23,6 +24,10 @@ class MyOrderCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         foundFlightId = foundFlightModel.id;
+        if (isFromHomeScreen) {
+          globalCreateFlightData = null;
+          globalSearchFlightData = null;
+        }
         Navigator.pushNamed(
           context,
           isFromHomeScreen ? '/home/passengers' : '/flight/passengers',

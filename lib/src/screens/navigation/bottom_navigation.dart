@@ -32,8 +32,15 @@ class BottomNavigation extends StatelessWidget {
     _controller = PersistentTabController(initialIndex: 0);
     List<Widget> _buildScreens() {
       return [
-        BlocProvider(
-          create: (context) => FlightsBloc(flightServices: getIt()),
+        MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => FlightsBloc(flightServices: getIt()),
+            ),
+            BlocProvider(
+              create: (context) => ProfileBloc(profileService: getIt()),
+            ),
+          ],
           child: HomeScreen(),
         ),
         BlocProvider(
@@ -64,8 +71,17 @@ class BottomNavigation extends StatelessWidget {
           routeAndNavigatorSettings: RouteAndNavigatorSettings(
             initialRoute: '/home',
             routes: {
-              '/home/passengers': (context) => BlocProvider(
-                    create: (context) => FlightsBloc(flightServices: getIt()),
+              '/home/passengers': (context) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (context) =>
+                            FlightsBloc(flightServices: getIt()),
+                      ),
+                      BlocProvider(
+                        create: (context) =>
+                            ProfileBloc(profileService: getIt()),
+                      ),
+                    ],
                     child: AddPassengersScreen(),
                   ),
             },
@@ -101,8 +117,17 @@ class BottomNavigation extends StatelessWidget {
                     create: (context) => FlightsBloc(flightServices: getIt()),
                     child: FoundFlightsScreen(),
                   ),
-              '/flight/passengers': (context) => BlocProvider(
-                    create: (context) => FlightsBloc(flightServices: getIt()),
+              '/flight/passengers': (context) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (context) =>
+                            FlightsBloc(flightServices: getIt()),
+                      ),
+                      BlocProvider(
+                        create: (context) =>
+                            ProfileBloc(profileService: getIt()),
+                      ),
+                    ],
                     child: AddPassengersScreen(),
                   ),
             },

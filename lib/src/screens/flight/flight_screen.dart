@@ -7,6 +7,7 @@ import 'package:one_aviation/src/common/widgets/text/error_message.dart';
 import 'package:one_aviation/src/constants/colors.dart';
 import 'package:one_aviation/src/constants/spacing.dart';
 import 'package:one_aviation/src/constants/text_styles.dart';
+import 'package:one_aviation/src/models/create_flight/create_flight_model.dart';
 import 'package:one_aviation/src/models/location_coords_model.dart';
 import 'package:one_aviation/src/models/ports/port_location_model.dart';
 import 'package:one_aviation/src/models/search_flight/search_flight_model.dart';
@@ -17,6 +18,7 @@ import 'widgets/options_buttons.dart';
 import 'widgets/radio_buttons.dart';
 
 SearchFlightModel? globalSearchFlightData;
+CreateFlightModel? globalCreateFlightData;
 
 class FlightScreen extends StatefulWidget {
   @override
@@ -70,6 +72,7 @@ class _FlightScreenState extends State<FlightScreen> {
                           _options[1] = false;
                           departure = "Departure";
                           returnDate = "Return";
+                          globalCreateFlightData = null;
                           FocusScope.of(context).unfocus();
                         });
                       },
@@ -79,6 +82,7 @@ class _FlightScreenState extends State<FlightScreen> {
                           _options[1] = true;
                           departure = "Departure";
                           returnDate = "Return";
+                          globalSearchFlightData = null;
                           FocusScope.of(context).unfocus();
                         });
                       },
@@ -282,7 +286,43 @@ class _FlightScreenState extends State<FlightScreen> {
                     });
                   }
                 }
-              : () {},
+              : () {
+                  if (((val == 1 && returnDate != "Return") || (val == 2)) &&
+                      departure != "Departure" &&
+                      toPort != null &&
+                      fromPort != null) {
+                    FocusScope.of(context).unfocus();
+                    setState(() => _showError = false);
+
+                    globalCreateFlightData = CreateFlightModel(
+                      dateFrom: DateTime.parse(departure),
+                      dateTo: returnDate != "Return"
+                          ? DateTime.parse(returnDate)
+                          : null,
+                      locationFrom: LocationCoordsModel(
+                        latitude: fromPort!.latitude,
+                        longitude: fromPort!.longitude,
+                        name: fromPortName,
+                      ),
+                      locationTo: LocationCoordsModel(
+                        latitude: toPort!.latitude,
+                        longitude: toPort!.longitude,
+                        name: toPortName,
+                      ),
+                      document: null,
+                      email: '',
+                      passengers: [],
+                      phoneNumber: '',
+                      shareable: checkedValue,
+                    );
+                    Navigator.pushNamed(context, '/flight/passengers');
+                  } else {
+                    setState(() {
+                      _showError = true;
+                      _errorMessage = 'Fill in all the fields';
+                    });
+                  }
+                },
         ),
         SizedBox(height: 60),
       ],

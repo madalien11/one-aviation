@@ -37,3 +37,12 @@ class MyHistoryUnsuccessful extends FlightsState {
   MyHistoryUnsuccessful({required this.errorMessage});
   final String errorMessage;
 }
+
+class CreateFlightLoading extends FlightsState {}
+
+class CreateFlightSuccessful extends FlightsState {}
+
+class CreateFlightUnsuccessful extends FlightsState {
+  CreateFlightUnsuccessful({required this.errorMessage});
+  final String errorMessage;
+}

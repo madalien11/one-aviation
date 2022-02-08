@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:one_aviation/src/common/dependencies/injection_container.dart';
 import 'package:one_aviation/src/common/validator/validators.dart';
 import 'package:one_aviation/src/common/widgets/buttons/pink_rounded_button.dart';
 import 'package:one_aviation/src/common/widgets/images/bottom_rounded_image.dart';
@@ -10,6 +11,7 @@ import 'package:one_aviation/src/common/widgets/text_fields/rounded_text_field.d
 import 'package:one_aviation/src/constants/colors.dart';
 import 'package:one_aviation/src/constants/spacing.dart';
 import 'package:one_aviation/src/constants/text_styles.dart';
+import 'package:one_aviation/src/screens/profile/bloc/profile_bloc.dart';
 import 'package:one_aviation/src/screens/profile/profile_screen.dart';
 
 import 'bloc/auth_bloc.dart';
@@ -53,7 +55,12 @@ class _LoginScreenState extends State<LoginScreen> {
               setState(() => _showError = false);
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => ProfileScreen()),
+                MaterialPageRoute(
+                  builder: (context) => BlocProvider(
+                    create: (context) => ProfileBloc(profileService: getIt()),
+                    child: ProfileScreen(),
+                  ),
+                ),
               );
             } else if (state is LoginUnsuccessful) {
               setState(() {

@@ -3,6 +3,7 @@ import 'package:one_aviation/src/common/utils/price_formatter.dart';
 import 'package:one_aviation/src/constants/colors.dart';
 import 'package:one_aviation/src/constants/text_styles.dart';
 import 'package:one_aviation/src/models/search_flight/found_flight_model.dart';
+import 'package:one_aviation/src/screens/flight/flight_data/flight_data_screen.dart';
 import 'package:one_aviation/src/screens/flight/flight_screen.dart';
 
 import 'one_direction_data.dart';
@@ -32,9 +33,18 @@ class MyOrderCard extends StatelessWidget {
                 globalCreateFlightData = null;
                 globalSearchFlightData = null;
               }
-              Navigator.pushNamed(
+              // Navigator.pushNamed(
+              //   context,
+              //   isFromHomeScreen ? '/home/passengers' : '/flight/passengers',
+              // );
+              Navigator.push(
                 context,
-                isFromHomeScreen ? '/home/passengers' : '/flight/passengers',
+                MaterialPageRoute(
+                  builder: (context) => FlightDataScreen(
+                    foundFlightModel: foundFlightModel,
+                    isFromHomeScreen: isFromHomeScreen,
+                  ),
+                ),
               );
             },
       child: Container(

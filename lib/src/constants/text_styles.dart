@@ -165,4 +165,15 @@ class MyTextStyle {
     color: BlackTitleTextColor,
     fontWeight: FontWeight.w500,
   );
+
+  static const TextStyle FlightDataBoldTextStyle = TextStyle(
+    fontSize: 16,
+    color: BlackTitleTextColor,
+    fontWeight: FontWeight.w600,
+  );
+  static const TextStyle FlightDataTextStyle = TextStyle(
+    fontSize: 16,
+    color: BlackTitleTextColor,
+    fontWeight: FontWeight.w400,
+  );
 }

@@ -30,7 +30,7 @@ class MyHistoryLoading extends FlightsState {}
 
 class MyHistorySuccessful extends FlightsState {
   MyHistorySuccessful({required this.myHistory});
-  final dynamic myHistory;
+  final List<FoundFlightModel> myHistory;
 }
 
 class MyHistoryUnsuccessful extends FlightsState {

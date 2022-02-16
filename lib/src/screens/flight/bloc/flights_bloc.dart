@@ -41,10 +41,13 @@ class FlightsBloc extends Bloc<FlightsEvent, FlightsState> {
     } else if (event is GetMyHistory) {
       yield MyHistoryLoading();
       var res = await flightServices.getMyHistory();
-      if (res['successful']) {
-        yield MyHistorySuccessful(myHistory: res['message']);
+      if (res != null && res.keys.first != null) {
+        yield MyHistorySuccessful(myHistory: res.keys.first!);
       } else {
-        yield MyHistoryUnsuccessful(errorMessage: res['message']);
+        yield MyHistoryUnsuccessful(
+          errorMessage:
+              res == null ? 'Flights were not found' : res.values.first,
+        );
       }
     } else if (event is CreateFlight) {
       yield CreateFlightLoading();

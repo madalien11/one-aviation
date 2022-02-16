@@ -15,7 +15,7 @@ abstract class FlightServices {
 
   Future<Map<String, dynamic>> createFlight(CreateFlightModel flightData);
 
-  Future<Map<String, dynamic>> getMyHistory();
+  Future<Map<List<FoundFlightModel>?, String>?> getMyHistory();
 }
 
 class FlightImplServices implements FlightServices {
@@ -72,19 +72,24 @@ class FlightImplServices implements FlightServices {
   }
 
   @override
-  Future<Map<String, dynamic>> getMyHistory() async {
+  Future<Map<List<FoundFlightModel>?, String>?> getMyHistory() async {
     try {
       var box = Hive.box('tokens');
       dio.options.headers['Authorization'] = 'Bearer ${box.get('access')}';
       var response = await dio.get('order/history');
-      return {'message': response, 'successful': true};
+      var responseList = response.data!['flights'] as List?;
+      if (responseList != null) {
+        var result =
+            responseList.map((e) => FoundFlightModel.fromJson(e)).toList();
+
+        return {result: ''};
+      } else {
+        return {null: 'No flights were found'};
+      }
     } on DioError catch (e) {
       // Handle error
-      print(e);
-      return {
-        'message': e.response!.data['error'].toString(),
-        'successful': false
-      };
+      print(e.message);
+      return {null: e.message};
     }
   }
 

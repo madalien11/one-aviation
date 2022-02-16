@@ -11,7 +11,7 @@ FoundFlightModel _$FoundFlightModelFromJson(Map<String, dynamic> json) {
     id: json['id'] as int,
     departureTime: DateTime.parse(json['departure_time'] as String),
     arrivalTime: DateTime.parse(json['arrival_time'] as String),
-    availableSeats: json['available_seats'] as int,
+    availableSeats: json['available_seats'] as int?,
     price: json['price'] as String,
     from: LocationCoordsModel.fromJson(json['from'] as Map<String, dynamic>),
     to: LocationCoordsModel.fromJson(json['to'] as Map<String, dynamic>),

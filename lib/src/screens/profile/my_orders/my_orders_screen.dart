@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:one_aviation/src/constants/colors.dart';
 import 'package:one_aviation/src/constants/spacing.dart';
 import 'package:one_aviation/src/constants/text_styles.dart';
-import 'package:one_aviation/src/models/location_coords_model.dart';
-import 'package:one_aviation/src/models/search_flight/found_flight_model.dart';
+import 'package:one_aviation/src/screens/flight/bloc/flights_bloc.dart';
 
 import 'widgets/my_order_card.dart';
 
@@ -16,6 +16,12 @@ class MyOrdersScreen extends StatefulWidget {
 }
 
 class _MyOrdersScreenState extends State<MyOrdersScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<FlightsBloc>().add(GetMyHistory());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,32 +46,28 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
       body: SafeArea(
         child: Padding(
           padding: paddingAll20,
-          child: ListView.builder(
-            itemBuilder: (context, i) {
-              return MyOrderCard(
-                foundFlightModel: FoundFlightModel(
-                  id: 69,
-                  departureTime: DateTime.now(),
-                  arrivalTime: DateTime.now().add(
-                    Duration(hours: 3, minutes: 15),
-                  ),
-                  availableSeats: 3,
-                  price: '2500',
-                  from: LocationCoordsModel(
-                    latitude: 44.093484,
-                    longitude: 11.495894,
-                    name: 'From',
-                  ),
-                  to: LocationCoordsModel(
-                    latitude: 42.395839,
-                    longitude: 12.093458,
-                    name: 'To',
-                  ),
-                  status: 'Active',
-                ),
-              );
+          child: BlocBuilder<FlightsBloc, FlightsState>(
+            builder: (context, state) {
+              if (state is MyHistoryUnsuccessful) {
+                return GestureDetector(
+                    onTap: () {
+                      context.read<FlightsBloc>().add(GetMyHistory());
+                    },
+                    child: Center(child: Text(state.errorMessage)));
+              } else if (state is MyHistorySuccessful) {
+                return ListView.builder(
+                  itemBuilder: (context, i) {
+                    return MyOrderCard(
+                      isMyHistory: true,
+                      foundFlightModel: state.myHistory[i],
+                    );
+                  },
+                  itemCount: state.myHistory.length,
+                );
+              } else {
+                return Center(child: CupertinoActivityIndicator());
+              }
             },
-            itemCount: 5,
           ),
         ),
       ),

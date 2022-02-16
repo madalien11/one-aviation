@@ -159,7 +159,10 @@ class BottomNavigation extends StatelessWidget {
                     create: (context) => AuthBloc(authServices: getIt()),
                     child: NewPasswordScreen(),
                   ),
-              '/profile/my_orders': (context) => MyOrdersScreen(),
+              '/profile/my_orders': (context) => BlocProvider(
+                    create: (context) => FlightsBloc(flightServices: getIt()),
+                    child: MyOrdersScreen(),
+                  ),
             },
           ),
         ),

@@ -14,25 +14,29 @@ class MyOrderCard extends StatelessWidget {
     Key? key,
     required this.foundFlightModel,
     this.isFromHomeScreen = false,
+    this.isMyHistory = false,
   }) : super(key: key);
 
   final FoundFlightModel foundFlightModel;
   final bool isFromHomeScreen;
+  final bool isMyHistory;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        foundFlightId = foundFlightModel.id;
-        if (isFromHomeScreen) {
-          globalCreateFlightData = null;
-          globalSearchFlightData = null;
-        }
-        Navigator.pushNamed(
-          context,
-          isFromHomeScreen ? '/home/passengers' : '/flight/passengers',
-        );
-      },
+      onTap: isMyHistory
+          ? () {}
+          : () {
+              foundFlightId = foundFlightModel.id;
+              if (isFromHomeScreen) {
+                globalCreateFlightData = null;
+                globalSearchFlightData = null;
+              }
+              Navigator.pushNamed(
+                context,
+                isFromHomeScreen ? '/home/passengers' : '/flight/passengers',
+              );
+            },
       child: Container(
         height: 150,
         width: double.infinity,

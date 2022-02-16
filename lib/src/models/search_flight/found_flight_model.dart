@@ -9,7 +9,7 @@ class FoundFlightModel {
     required this.id,
     required this.departureTime,
     required this.arrivalTime,
-    required this.availableSeats,
+    this.availableSeats,
     required this.price,
     required this.from,
     required this.to,
@@ -19,7 +19,7 @@ class FoundFlightModel {
   @JsonKey(name: 'arrival_time')
   final DateTime arrivalTime;
   @JsonKey(name: 'available_seats')
-  final int availableSeats;
+  final int? availableSeats;
   @JsonKey(name: 'departure_time')
   final DateTime departureTime;
   final LocationCoordsModel from;
